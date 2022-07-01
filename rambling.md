@@ -9,6 +9,7 @@ Basically a distributed encyclopedia
 
 - IPFS
 - Arweave
+- Prolog
 
 My vision goes beyond what these have provided.  
 I can describe the content I know and love, so why should it be hard to find it?  

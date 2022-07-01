@@ -1,12 +1,18 @@
 type Atom = string;
 
-class Thing {
-    type: Atom;
+class Type {
+    id: Atom;
     version: Atom;
+}
+
+class Thing {
+    type: Type;
     id: Atom;
 }
 
-class Relationship extends Thing {
+class Relationship {
+    version: Atom;
+    nature: Type;
     left: Thing;
     right: Thing;
 }

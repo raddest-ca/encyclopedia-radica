@@ -1,4 +1,7 @@
 # encyclopedia-radica
+
+"If you wish to make an apple pie from scratch, you must first invent the universe" - Carl Sagan
+
 A categorization of things I find interesting.
 
 According to Wikipedia and Google Translate, Radica means "root", which is a happy coincidence since I want the name to match Raddest.
