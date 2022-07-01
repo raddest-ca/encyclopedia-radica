@@ -21,11 +21,9 @@ export class App {
 			res.sendFile("Howdy!");
 		});
 		this.express.post("/things", (req, res) => {
-			console.dir(req.body);
 			res.json(this.store.getThings(req.body.body as ThingQuery));
 		});
 		this.express.post("/rels", (req, res) => {
-			console.dir(req.body);
 			res.json(this.store.getRelationships(req.body.body as RelationshipQuery));
 		});
 	}

@@ -39,7 +39,6 @@ export class Store {
 	}
 
 	public getThings(t: ThingQuery): Array<Thing> {
-		console.dir(t);
 		return this.things.filter(x => isOfType(x, t.type));
 	}
 
