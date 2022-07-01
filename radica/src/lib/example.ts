@@ -8,27 +8,31 @@ export function addData(store: Store) {
 			id: value,
 		} as Thing;
 	}
-	
+
 	function thing(type: Type) {
 		const rtn: Thing = {
 			type,
 			id: uuid(),
-		}
-		store.things.push(rtn);
+		};
+		store.add(rtn);
 		return rtn;
 	}
 
-	function rel(left: Thing, nature: Type,  right: Thing) {
-		const x = { version: "1.0.0", nature, left, right, } as Relationship;
-		store.things.push(x);
+	function rel(left: Thing, nature: Type, right: Thing) {
+		const x = { version: "1.0.0", nature, left, right } as Relationship;
+		store.add(x);
 		return x;
 	}
 
 	function phrase(language: Thing, value: Atom) {
 		const x = literal(value);
-		store.things.push(x);
+		store.add(x);
 		rel(x, knownTypes.language, language);
 		return x;
+	}
+
+	function id(it: Thing, id: Atom) {
+		return rel(it, knownTypes.identifier, literal(id));
 	}
 
 	function name(it: Thing, language: Thing, nickname: Atom) {
@@ -36,42 +40,72 @@ export function addData(store: Store) {
 	}
 
 	function feature(it: Thing, ...features: Thing[]) {
-		features.forEach(x => rel(it, knownTypes.feature, x));
+		features.forEach((x) => rel(it, knownTypes.feature, x));
 	}
 
 	function transcribe(it: Thing, ...phrases: Thing[]) {
 		const trans = thing(knownTypes.transcript);
-		phrases.forEach(p => rel(trans, knownTypes.feature, p));
+		phrases.forEach((p) => rel(trans, knownTypes.feature, p));
 		rel(it, knownTypes.transcript, trans);
 		return trans;
 	}
 
+	for (const type of Object.values(knownTypes)) {
+		const t = thing(knownTypes.type);
+		id(t, type.id);
+	}
+
 	const en = thing(knownTypes.language);
-    name(en, en, "English");
+	name(en, en, "English");
 
 	const enja = thing(knownTypes.language);
 	name(enja, en, "Romanized Japanese");
 
 	{
 		const meme = thing(knownTypes.meme);
-	
+
 		const lain = thing(knownTypes.character);
 		name(lain, en, "Lain");
 		feature(meme, lain);
-	
+
 		const scooby = thing(knownTypes.character);
 		name(scooby, en, "Scooby Doo");
 		feature(meme, scooby);
-	
+
 		const shaggy = thing(knownTypes.character);
 		name(shaggy, en, "Shaggy");
 		feature(meme, shaggy);
-	
+
 		const transcript = transcribe(meme);
-		feature(transcript, phrase(en, `A character speaking Japanese is talking to Lain: subtitled "It's nothing. Forget about it." The character walks away up a set of stairs. Lain turns to see Scooby Doo sitting on the ground. Scooby Doo transforms into a car while saying "A-schweee", Shaggy hops into the car, and it drives off the right of the frame.`));
-	
+		feature(
+			transcript,
+			phrase(
+				en,
+				`A character speaking Japanese is talking to Lain: subtitled "It's nothing. Forget about it." The character walks away up a set of stairs. Lain turns to see Scooby Doo sitting on the ground. Scooby Doo transforms into a car while saying "A-schweee", Shaggy hops into the car, and it drives off the right of the frame.`,
+			),
+		);
+
 		const style = thing(knownTypes.style);
 		name(style, en, "Cel Animation");
 		feature(meme, style);
+	}
+
+	{
+		const trans: Transformer = {
+			id: "phrase 2 word",
+			predicate: (x) => isThing(x) && x.type === knownTypes.transcript,
+			transform: (x) => x,
+		};
+		const transThing = thing(knownTypes.transformer);
+		id(transThing, trans.id);
+		store.addTransformer(trans);
+	}
+
+	{
+		const trans: Transformer = {
+			id: "literal-hash",
+			predicate: (x) => isThing(x) && x.type === knownTypes.literal,
+			transform: (x) => x,
+		};
 	}
 }
