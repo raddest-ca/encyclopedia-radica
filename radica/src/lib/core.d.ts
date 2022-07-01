@@ -1,28 +1,28 @@
-type Atom = string;
+export type Atom = string;
 
-interface Type {
+export interface Type {
 	id: Atom;
 	version: Atom;
 }
-function isType(obj: any): obj is Type {
+export function isType(obj: any): obj is Type {
 	return obj.id !== undefined && obj.version !== undefined;
 }
 
-interface Thing {
+export interface Thing {
 	type: Type;
 	id: Atom;
 }
-function isThing(obj: any): obj is Thing {
+export function isThing(obj: any): obj is Thing {
 	return obj.type !== undefined && obj.id !== undefined;
 }
 
-interface Relationship {
+export interface Relationship {
 	version: Atom;
 	nature: Type;
 	left: Thing;
 	right: Thing;
 }
-function isRelationship(obj: any): obj is Relationship {
+export function isRelationship(obj: any): obj is Relationship {
 	return (
 		obj.version !== undefined &&
 		obj.nature !== undefined &&
@@ -31,10 +31,5 @@ function isRelationship(obj: any): obj is Relationship {
 	);
 }
 
-type Either = Thing | Relationship;
-
-class Transformer {
-	id: string;
-	predicate: (x: Either) => boolean;
-	transform: (x: Either) => Either;
-}
+export type Either = Thing | Relationship;
+export type EitherConsumer = (x: Either) => void;

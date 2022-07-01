@@ -1,4 +1,7 @@
-class Store {
+import type { Relationship, Thing, Type } from "./core";
+import type { Transformer } from "./transformer";
+
+export class Store {
 	private all: Array<Thing | Relationship> = [];
 	private transformers: Record<string, Transformer> = {};
 
@@ -9,6 +12,7 @@ class Store {
 
 	public addTransformer(x: Transformer) {
 		this.transformers[x.id] = x;
+		return x;
 	}
 
 	public get(t: Type): Array<Thing | Relationship> {
