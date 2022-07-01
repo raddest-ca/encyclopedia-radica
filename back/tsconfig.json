@@ -1,0 +1,17 @@
+{
+	"include": ["src/**/*.ts", "src/**/*.js"],
+	"exclude": ["node_modules/**", "build/**"],
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "commonjs",
+		"outDir": "build",
+		"sourceMap": true,
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": true,
+	}
+}

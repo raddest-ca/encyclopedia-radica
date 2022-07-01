@@ -18,8 +18,8 @@ function thing(type: Type): Thing {
 	};
 }
 
-function rel(left: Thing, nature: Type, right: Thing): Relationship {
-	return { version: "1.0.0", nature, left, right };
+function rel(left: Thing, type: Type, right: Thing): Relationship {
+	return { type, left, right };
 }
 
 function phrase(language: Thing, value: Atom): Either[] {
@@ -34,7 +34,7 @@ function id(it: Thing, id: Atom): Either[] {
 
 function name(it: Thing, language: Thing, nickname: Atom): Either[] {
 	const p = phrase(language, nickname);
-	const r = rel(it, knownTypes.name, p);
+	const r = rel(it, knownTypes.name, p[0] as Thing);
 	return [r, ...p];
 }
 
@@ -58,6 +58,7 @@ export function addData(store: Store) {
 	const types: Record<string, Thing> = {};
 	for (const type of Object.values(knownTypes)) {
 		const t = thing(knownTypes.type);
+		add(t);
 		add(...id(t, type.id));
 		types[type.id] = t;
 	}
