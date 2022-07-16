@@ -1,10 +1,7 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import { RelationshipQuery, Store, ThingQuery } from "../models/store";
-import type { Query } from "express-serve-static-core";
-import { knownTypes } from "../models/known-types";
-import { Type } from "../models/core";
+import { RelationshipQuery, Store, ThingQuery } from "../data/store";
 
 export class App {
 	private store: Store;

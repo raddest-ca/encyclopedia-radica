@@ -7,8 +7,8 @@ import {
 	Relationship,
 	Thing,
 	Type,
-} from "./core";
-import type { Transformer } from "./transformer";
+} from "../models/core";
+import type { Transformer } from "../models/transformer";
 
 export interface ThingQuery {
 	type: Type;

@@ -1,6 +1,7 @@
-import { Atom, Either, Relationship, Thing, Type } from "./core";
+import { Either, Relationship, Thing, Type } from "./core";
 import { knownTypes } from "./known-types";
 import { v4 as uuid } from "uuid";
+import { toIsoString } from "../jshelpers";
 
 type HelperResult = {
 	ref: Record<string, HelperResult | Either>;
@@ -14,7 +15,7 @@ export function thing(type: Type, id: string | null = null): Thing {
 	};
 }
 
-export function string(value: Atom): Thing {
+export function string(value: string): Thing {
 	return thing(knownTypes.string, value);
 }
 
@@ -22,7 +23,7 @@ export function rel(left: Thing, type: Type, right: Thing): Relationship {
 	return { type, left, right };
 }
 
-export function id(it: Thing, id: Atom) {
+export function id(it: Thing, id: string) {
 	const _id = string(id);
 	const _rel = rel(it, knownTypes.identifier, _id);
 
@@ -35,14 +36,22 @@ export function id(it: Thing, id: Atom) {
 	};
 }
 
-export function meta(it: Thing): Either[] {
+export function meta(it: Thing, date: Date | null = null) {
 	const _meta = thing(knownTypes.metadata);
 	const _rel = rel(it, knownTypes.metadata, _meta);
-	const dat = thing(knownTypes.date);
-	return [_meta, _rel];
+	const dat = thing(knownTypes.date, toIsoString(date??new Date()));
+	const rtn = {
+        ref: {
+            meta: _meta,
+            rel: _rel,
+            date: dat,
+        },
+        all: [_meta, _rel],
+    } 
+    return rtn as HelperResult & typeof rtn;
 }
 
-export function translate(language: Thing, value: Atom) {
+export function translate(language: Thing, value: string) {
 	const trans = thing(knownTypes.translation);
 	const str = string(value);
 	const _rel = rel(trans, knownTypes.language, language);
@@ -58,7 +67,7 @@ export function translate(language: Thing, value: Atom) {
     return rtn as HelperResult & typeof rtn;
 }
 
-export function name(it: Thing, language: Thing, nickname: Atom) {
+export function name(it: Thing, language: Thing, nickname: string) {
 	const _trans = translate(language, nickname);
 	const _rel = rel(it, knownTypes.name, _trans.ref.trans as Thing);
 	const rtn = {
@@ -84,17 +93,16 @@ export function transcribe(it: Thing, language: Thing, value: string) {
     return rtn as HelperResult & typeof rtn;
 }
 
-export function link(it: Thing, ...uris: Atom[]) {
-	const _uris = uris.map(x => string(x));
-	const rels = _uris.map(x => rel(it, knownTypes.uri, x));
+export function link(it: Thing, uri: string) {
+	const str = string(uri);
+	const _rel = rel(it, knownTypes.uri, str);
 	
     const rtn = {
         ref: {
-            uris: _uris,
-            rels: rels,  
+            rel: _rel,
+            str: str,
         },
-        all: [..._uris, ...rels],
+        all: [str, _rel],
     };
     return rtn as HelperResult & typeof rtn;
-
 }

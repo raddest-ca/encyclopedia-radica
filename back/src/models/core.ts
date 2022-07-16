@@ -1,8 +1,6 @@
-export type Atom = string;
-
 export interface Type {
-	id: Atom;
-	version: Atom;
+	id: string;
+	version: string;
 }
 export function isType(obj: any): obj is Type {
 	return obj.id !== undefined && obj.version !== undefined;
@@ -10,7 +8,7 @@ export function isType(obj: any): obj is Type {
 
 export interface Thing {
 	type: Type;
-	id: Atom;
+	id: string;
 }
 export function isThing(obj: any): obj is Thing {
 	return obj.type !== undefined && obj.id !== undefined;
