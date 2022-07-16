@@ -1,5 +1,5 @@
 import { App } from "./app";
-import { addData } from "./models/example";
+import { addData } from "./data/data-seeder";
 import { Store } from "./models/store";
 
 const store = new Store();

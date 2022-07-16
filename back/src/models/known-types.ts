@@ -1,31 +1,44 @@
 const version = "1.0.0";
 
-// prettier-ignore
 export const knownTypes = {
-	literal:		{ id: "literal", 				version },
+	string: { id: "string", version },
+	number: { id: "number", version },
+	type: { id: "type", version },
+	identifier: { id: "id", version },
+	metadata: { id: "metadata", version },
+	hash: { id: "hash", version },
+	translation: {id: "translation", version},
 
-	type:			{ id: "type", 					version },
-	identifier:		{ id: "id", 					version },
-	hash:			{ id: "hash", 					version },
+	date: { id: "date", version },
+	datetime: { id: "datetime", version },
+
+	video: { id: "video", version },
+	uri: { id: "uri", version },
+
+	transcript: { id: "transcript", version },
+
+	
+	// unit: 			{ id: "unit",					version },
+	// date: 			{ id: "date",					version },
 
 	// set:			{ id: "set", 					version },
 	// member:			{ id: "member",					version	},
 
-	transformer:	{ id: "transformer", 			version },
-	funcsig:		{ id: "function signature",		version },
-	input:			{ id: "input", 					version },
-	output:			{ id: "output",					version },
-	constraint:		{ id: "constraint",	 			version },
-	feature:		{ id: "feature", 				version },
+	// transformer:	{ id: "transformer", 			version },
+	// funcsig:		{ id: "function signature",		version },
+	// input:			{ id: "input", 					version },
+	// output:			{ id: "output",					version },
+	// constraint:		{ id: "constraint",	 			version },
 
-	character:		{ id: "cartoon character", 		version },
-	name:			{ id: "nickname", 				version },
-	language:		{ id: "language", 				version },
-	
-	transcript:		{ id: "transcript", 			version },
-	style:			{ id: "style", 					version },
+	feature: { id: "feature", version },
 
-	meme:			{ id: "meme", 					version },
+	character: { id: "character", version },
+	name: { id: "nickname", version },
+	language: { id: "language", version },
+
+	style: { id: "style", version },
+
+	meme: { id: "meme", version },
 };
 
 // export type KnownType = typeof knownTypes[keyof typeof knownTypes];
