@@ -21,7 +21,7 @@ export type Either = Thing | Relationship;
 export type EitherConsumer = (x: Either) => void;
 
 export interface ThingQuery {
-	type: Type;
+	type: Partial<Type>;
 }
 
 export interface RelationshipQuery {

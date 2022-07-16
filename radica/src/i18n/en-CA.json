@@ -1,6 +1,8 @@
 {
     "loading": "Loading",
-    "resource.id":"Resource Identifier",
     "id": "Identifier",
-    "version": "Version"
+    "resource":"Resource",
+    "type": "Type",
+    "version": "Version",
+    "name": "Name"
 }

@@ -23,19 +23,6 @@ export function rel(left: Thing, type: Type, right: Thing): Relationship {
 	return { type, left, right };
 }
 
-export function id(it: Thing, id: string) {
-	const _id = string(id);
-	const _rel = rel(it, knownTypes.identifier, _id);
-
-	return {
-		ref: {
-			id: _id,
-			rel: _rel,
-		},
-		all: [_id, _rel],
-	};
-}
-
 export function meta(it: Thing, date: Date | null = null) {
 	const _meta = thing(knownTypes.metadata);
 	const _rel = rel(it, knownTypes.metadata, _meta);

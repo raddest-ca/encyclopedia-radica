@@ -4,7 +4,6 @@ export const knownTypes = {
 	string: { id: "string", version },
 	number: { id: "number", version },
 	type: { id: "type", version },
-	identifier: { id: "id", version },
 	metadata: { id: "metadata", version },
 	hash: { id: "hash", version },
 	translation: {id: "translation", version},

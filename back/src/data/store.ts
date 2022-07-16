@@ -1,26 +1,9 @@
-import {
-	Either,
-	isOfType,
-	isRelationship,
-	isSameThing,
-	isThing,
-	Relationship,
-	Thing,
-	Type,
-} from "../models/core";
+import { Either, isRelationship, isThing, Relationship, Thing } from "../models/core";
+import type { DeepPartial } from "tsdef";
 import type { Transformer } from "../models/transformer";
 
-export interface ThingQuery {
-	type: Type;
-}
-
-export interface RelationshipQuery {
-	left?: Thing;
-	leftType?: Type;
-	right?: Thing;
-	rightType?: Type;
-	type?: Type;
-}
+export type ThingQuery = DeepPartial<Thing>;
+export type RelationshipQuery = DeepPartial<Relationship>;
 
 export class Store {
 	private things: Array<Thing> = [];
@@ -38,18 +21,53 @@ export class Store {
 		return x;
 	}
 
-	public getThings(t: ThingQuery): Array<Thing> {
-		return this.things.filter(x => isOfType(x, t.type));
+	public getThings(query: ThingQuery): Array<Thing> {
+		let pred: (t: Thing) => boolean = _ => true;
+		if (query.type?.id !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.type.id === query.type!.id;
+		}
+		if (query.type?.version !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.type.version === query.type!.version;
+		}
+		return this.things.filter(pred);
 	}
 
 	public getRelationships(query: RelationshipQuery): Array<Relationship> {
-		return this.relationships.filter(
-			x =>
-				(query.type === undefined || isOfType(x, query.type)) &&
-				(query.left === undefined || isSameThing(x.left, query.left)) &&
-				(query.right === undefined || isSameThing(x.right, query.right)) &&
-				(query.leftType === undefined || isOfType(x.left, query.leftType)) &&
-				(query.rightType === undefined || isOfType(x.right, query.rightType)),
-		);
+		let pred: (t: Relationship) => boolean = _ => true;
+		if (query.type?.id !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.type.id === query.type!.id;
+		}
+		if (query.type?.version !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.type.version === query.type!.version;
+		}
+		if (query.left?.id !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.left.id === query.left?.id;
+		}
+		if (query.left?.type?.id !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.left.type?.id === query.left?.type?.id;
+		}
+		if (query.left?.type?.version !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.left.type?.version === query.left?.type?.version;
+		}
+		if (query.right?.id !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.right.id === query.right?.id;
+		}
+		if (query.right?.type?.id !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.right.type?.id === query.right?.type?.id;
+		}
+		if (query.right?.type?.version !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.right.type?.version === query.right?.type?.version;
+		}
+		return this.relationships.filter(pred);
 	}
 }

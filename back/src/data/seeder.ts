@@ -1,7 +1,7 @@
 import { knownTypes } from "../models/known-types";
 import type { Either, Thing } from "../models/core";
 import type { Store } from "./store";
-import { thing, rel, id, meta, name, transcribe, link } from "../models/helpers";
+import { thing, rel, meta, name, transcribe, link } from "../models/helpers";
 
 export function addData(store: Store) {
 	function add(...items: Either[]): Either[] {
@@ -11,9 +11,8 @@ export function addData(store: Store) {
 
 	const types: Record<string, Thing> = {};
 	for (const type of Object.values(knownTypes)) {
-		const t = thing(knownTypes.type);
+		const t = thing(knownTypes.type, type.id);
 		add(t);
-		add(...id(t, type.id).all);
 		types[type.id] = t;
 	}
 

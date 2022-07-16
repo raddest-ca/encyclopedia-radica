@@ -27,13 +27,5 @@ export function isRelationship(obj: any): obj is Relationship {
 	);
 }
 
-export function isOfType(obj: Either, t: Type) {
-	return obj.type.id === t.id && obj.type.version === t.version
-}
-
-export function isSameThing(left: Thing, right: Thing) {
-	return left.id === right.id && isOfType(left, right.type);
-}
-
 export type Either = Thing | Relationship;
 export type EitherConsumer = (x: Either) => void;
