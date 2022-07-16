@@ -20,14 +20,3 @@ export interface Relationship {
 export type Either = Thing | Relationship;
 export type EitherConsumer = (x: Either) => void;
 
-export interface ThingQuery {
-	type: Partial<Type>;
-}
-
-export interface RelationshipQuery {
-	left?: Thing;
-	leftType?: Type;
-	right?: Thing;
-	rightType?: Type;
-	type?: Type;
-}

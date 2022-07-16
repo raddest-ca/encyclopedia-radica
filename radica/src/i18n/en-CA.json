@@ -4,5 +4,10 @@
     "resource":"Resource",
     "type": "Type",
     "version": "Version",
-    "name": "Name"
+    "name": "Name",
+    "count": "Count",
+    "count.things": "Thing Count",
+    "count.relationships": "Relationship Count",
+    "route.things.type.index.discovered": "Discovered {count} types.",
+    "route.things.type.index.header": "Types"
 }

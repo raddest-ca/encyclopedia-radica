@@ -1,6 +1,16 @@
-import type { Relationship, RelationshipQuery, Thing, ThingQuery } from "./core";
+import type { Relationship, Thing} from "./core";
+import type { DeepPartial } from "tsdef"
+export interface ThingQuery {
+	filter: DeepPartial<Thing>;
+	countOnly?: boolean;
+}
+export interface RelationshipQuery {
+	filter: DeepPartial<Relationship>;
+	countOnly?: boolean;
+}
 
-export async function getThings(body: ThingQuery): Promise<Thing[]> {
+
+export async function getThings(body: ThingQuery) {
 	const req = await fetch("http://localhost:8080/things", {
 		headers: {
 			"Content-Type": "application/json",
@@ -10,10 +20,14 @@ export async function getThings(body: ThingQuery): Promise<Thing[]> {
 			body,
 		}),
 	});
-    return await req.json();
+    return await req.json() as {
+		values?: Thing[];
+		count: number;
+	};
 }
+export type ThingResults = Awaited<ReturnType<typeof getThings>>;
 
-export async function getRelationships(body: RelationshipQuery): Promise<Relationship[]> {
+export async function getRelationships(body: RelationshipQuery) {
 	const req = await fetch("http://localhost:8080/rels", {
 		headers: {
 			"Content-Type": "application/json",
@@ -23,5 +37,11 @@ export async function getRelationships(body: RelationshipQuery): Promise<Relatio
 			body,
 		}),
 	});
-    return await req.json();
+    return await req.json() as {
+		values?: Thing[];
+		count: number;
+	};
 }
+
+export type RelationshipResults = Awaited<ReturnType<typeof getRelationships>>;
+

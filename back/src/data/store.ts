@@ -2,8 +2,14 @@ import { Either, isRelationship, isThing, Relationship, Thing } from "../models/
 import type { DeepPartial } from "tsdef";
 import type { Transformer } from "../models/transformer";
 
-export type ThingQuery = DeepPartial<Thing>;
-export type RelationshipQuery = DeepPartial<Relationship>;
+export interface ThingQuery {
+	filter: DeepPartial<Thing>;
+	countOnly?: boolean;
+}
+export interface RelationshipQuery {
+	filter: DeepPartial<Relationship>;
+	countOnly?: boolean;
+}
 
 export class Store {
 	private things: Array<Thing> = [];
@@ -21,53 +27,63 @@ export class Store {
 		return x;
 	}
 
-	public getThings(query: ThingQuery): Array<Thing> {
+	public getThings(query: ThingQuery) {
+		console.dir(query);
 		let pred: (t: Thing) => boolean = _ => true;
-		if (query.type?.id !== undefined) {
+		if (query.filter.type?.id !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.type.id === query.type!.id;
+			pred = x => old(x) && x.type.id === query.filter.type!.id;
 		}
-		if (query.type?.version !== undefined) {
+		if (query.filter.type?.version !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.type.version === query.type!.version;
+			pred = x => old(x) && x.type.version === query.filter.type!.version;
 		}
-		return this.things.filter(pred);
+		const rtn = this.things.filter(pred);
+		return {
+			values: query.countOnly === true ? undefined : rtn,
+			count: rtn.length,
+		};
 	}
 
-	public getRelationships(query: RelationshipQuery): Array<Relationship> {
+	public getRelationships(query: RelationshipQuery) {
+		console.dir(query);
 		let pred: (t: Relationship) => boolean = _ => true;
-		if (query.type?.id !== undefined) {
+		if (query.filter.type?.id !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.type.id === query.type!.id;
+			pred = x => old(x) && x.type.id === query.filter.type!.id;
 		}
-		if (query.type?.version !== undefined) {
+		if (query.filter.type?.version !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.type.version === query.type!.version;
+			pred = x => old(x) && x.type.version === query.filter.type!.version;
 		}
-		if (query.left?.id !== undefined) {
+		if (query.filter.left?.id !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.left.id === query.left?.id;
+			pred = x => old(x) && x.left.id === query.filter.left?.id;
 		}
-		if (query.left?.type?.id !== undefined) {
+		if (query.filter.left?.type?.id !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.left.type?.id === query.left?.type?.id;
+			pred = x => old(x) && x.left.type?.id === query.filter.left?.type?.id;
 		}
-		if (query.left?.type?.version !== undefined) {
+		if (query.filter.left?.type?.version !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.left.type?.version === query.left?.type?.version;
+			pred = x => old(x) && x.left.type?.version === query.filter.left?.type?.version;
 		}
-		if (query.right?.id !== undefined) {
+		if (query.filter.right?.id !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.right.id === query.right?.id;
+			pred = x => old(x) && x.right.id === query.filter.right?.id;
 		}
-		if (query.right?.type?.id !== undefined) {
+		if (query.filter.right?.type?.id !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.right.type?.id === query.right?.type?.id;
+			pred = x => old(x) && x.right.type?.id === query.filter.right?.type?.id;
 		}
-		if (query.right?.type?.version !== undefined) {
+		if (query.filter.right?.type?.version !== undefined) {
 			const old = pred;
-			pred = x => old(x) && x.right.type?.version === query.right?.type?.version;
+			pred = x => old(x) && x.right.type?.version === query.filter.right?.type?.version;
 		}
-		return this.relationships.filter(pred);
+		const rtn = this.relationships.filter(pred);
+		return {
+			values: query.countOnly === true ? undefined : rtn,
+			count: rtn.length,
+		};
 	}
 }

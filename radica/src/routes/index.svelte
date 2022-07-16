@@ -34,7 +34,7 @@
 	// main().catch(console.error);
 </script>
 
-<a href="/type/thing/1.0.0">Browse the things</a>
+<a href="/things/type/type">Browse the things</a>
 <!-- 
 <h1>Memes</h1>
 <ul>
