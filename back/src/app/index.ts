@@ -15,7 +15,7 @@ export class App {
 		this.express.use(cors());
 		this.express.use(morgan("combined"));
 		this.express.get("/", (req, res) => {
-			res.sendFile("Howdy!");
+			res.send("Howdy!");
 		});
 		this.express.post("/things", (req, res) => {
 			res.json(this.store.getThings(req.body.body as ThingQuery));
