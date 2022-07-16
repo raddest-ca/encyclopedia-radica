@@ -17,23 +17,8 @@ export const knownTypes = {
 
 	transcript: { id: "transcript", version },
 
-	
-	// unit: 			{ id: "unit",					version },
-	// date: 			{ id: "date",					version },
-
-	// set:			{ id: "set", 					version },
-	// member:			{ id: "member",					version	},
-
-	// transformer:	{ id: "transformer", 			version },
-	// funcsig:		{ id: "function signature",		version },
-	// input:			{ id: "input", 					version },
-	// output:			{ id: "output",					version },
-	// constraint:		{ id: "constraint",	 			version },
-
-	feature: { id: "feature", version },
-
 	character: { id: "character", version },
-	name: { id: "nickname", version },
+	name: { id: "name", version },
 	language: { id: "language", version },
 
 	style: { id: "style", version },

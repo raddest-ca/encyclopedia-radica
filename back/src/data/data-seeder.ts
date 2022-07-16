@@ -75,50 +75,7 @@ Cuts to Lain looking slightly surprised.
 
 		style = thing(knownTypes.style);
 		add(style);
-		add(...name(style, en, "Cel Animation").all);
+		add(...name(style, en, "Anime").all);
 		add(rel(meme, knownTypes.style, style));
 	}
-
-	// {
-	// 	const trans: Transformer = {
-	// 		id: "phrase 2 word",
-	// 		predicate: (x) => isThing(x) && x.type === knownTypes.transcript,
-	// 		transform: (x) => x,
-	// 	};
-	// 	const transThing = thing(knownTypes.transformer);
-	// 	id(transThing, trans.id);
-	// 	store.addTransformer(trans);
-	// }
-
-	// {
-
-	// 	const t = store.addTransformer({
-	// 		id: "literal hash base64",
-	// 		apply: (x: Thing) => createHash("sha256").update(x.id).digest("base64"),
-	// 	});
-
-	// 	const trans = thing(knownTypes.transformer);
-	// 	add(trans);
-	// 	add(...id(trans, "literal hash base64"));
-
-	// 	const sig = thing(knownTypes.funcsig);
-	// 	add(sig);
-	// 	add(rel(trans, knownTypes.funcsig, sig));
-
-	// 	const input = thing(knownTypes.input);
-	// 	add(input);
-	// 	add(rel(sig, knownTypes.input, input));
-	// 	add(rel(input, knownTypes.type, types[knownTypes.literal.id]));
-
-	// 	const out = thing(knownTypes.output);
-	// 	add(out);
-	// 	add(rel(sig, knownTypes.output, out));
-	// 	add(rel(out, knownTypes.type, types[knownTypes.literal.id]));
-	// }
-
-	// {
-	// 	const unit = thing(knownTypes.unit);
-	// 	add(unit);
-	// 	add(...name(unit, en, "Days"))
-	// }
 }
