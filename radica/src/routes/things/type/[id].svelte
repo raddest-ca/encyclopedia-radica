@@ -24,7 +24,7 @@
 	export let things: Required<ThingResults>;
 </script>
 
-<h1><a href="./type">{$_("route.things.type.index.header")}</a></h1>
+<h1><a href="./">{$_("route.things.type.index.header")}</a></h1>
 
 <p>
 	{$_("route.things.type.index.discovered", {

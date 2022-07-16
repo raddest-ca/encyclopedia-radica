@@ -6,6 +6,7 @@
     "version": "Version",
     "name": "Name",
     "count": "Count",
+    "action.browser.back": "Back",
     "count.things": "Thing Count",
     "count.relationships": "Relationship Count",
     "route.things.type.index.discovered": "Discovered {count} types.",
