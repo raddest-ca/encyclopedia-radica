@@ -57,7 +57,9 @@
 </script>
 
 <div class="content m-2">
-	<h1 class="text-xl">{$_("route.backends.index.header")}</h1>
+	<h1 class="text-xl inline">{$_("route.backends.index.header")}</h1>
+	<span class="float-right">todo: add export and import using clipboard</span>
+	<br />
 	{#if $backends.length === 0}
 		<p>{$_("route.backends.index.none")}</p>
 	{:else}
