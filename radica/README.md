@@ -1,38 +1,29 @@
-# create-svelte
+# Frontend
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Routing
 
-## Creating a project
+- Cards mobile responsive, table vs fullscreen card
 
-If you're seeing this, you've probably already done this step. Congrats!
+### /things/type
 
-```bash
-# create a new project in the current directory
-npm init svelte
+- L
 
-# create a new project in my-app
-npm init svelte my-app
-```
+### /things/type/[id]
 
-## Developing
+- Lists versions of the type that are in use
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### /things/[type]
 
-```bash
-npm run dev
+- Lists cards for each ID using the type
+    - Only show card for most recent version
+<!-- - All versions for the type -->
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### /things/[type]/[id]
 
-## Building
+- List the type versions for this resource
+- If only one => say so, meta-refresh after 3 seconds
 
-To create a production version of your app:
+### /things/[type]/[id]/[version]
 
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- Render item
+- "See previous/other versions" => href=..

@@ -16,7 +16,7 @@ export function addData(store: Store) {
 		types[type.id] = t;
 	}
 
-	const en = thing(knownTypes.language);
+	const en = thing(knownTypes.language, "en-CA");
 	add(en);
 	add(...name(en, en, "English").all);
 

@@ -1,4 +1,6 @@
 {
+    "nav.home": "Home",
+    "nav.backends": "Using {active} of {total} backends.",
     "loading": "Loading",
     "id": "Identifier",
     "resource":"Resource",
@@ -10,5 +12,11 @@
     "count.things": "Thing Count",
     "count.relationships": "Relationship Count",
     "route.things.type.index.discovered": "Discovered {count} types.",
-    "route.things.type.index.header": "Types"
+    "route.things.type.index.header": "Types",
+    "route.backends.index.header": "Backends",
+    "route.backends.index.none": "No backends found.",
+    "route.backends.index.addButton": "Add",
+    "route.backends.index.active": "Active",
+    "route.backends.index.form.name.placeholder": "My Backend",
+    "route.backends.index.form.header": "Add a backend"
 }
