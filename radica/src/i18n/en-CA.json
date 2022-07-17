@@ -9,6 +9,7 @@
     "version": "Version",
     "name": "Name",
     "count": "Count",
+    "required": "Required",
     "action.browser.back": "Back",
     "count.things": "Thing Count",
     "count.relationships": "Relationship Count",
@@ -18,6 +19,10 @@
     "route.backends.index.none": "No backends found.",
     "route.backends.index.addButton": "Add",
     "route.backends.index.active": "Active",
+    "route.backends.index.form.name": "Name",
     "route.backends.index.form.name.placeholder": "My Backend",
-    "route.backends.index.form.header": "Add a backend"
+    "route.backends.index.form.uri": "URI",
+    "route.backends.index.form.uri.placeholder": "https://data.beans.example.com/",
+    "route.backends.index.form.header": "Add a backend",
+    "route.backends.index.form.success": "Successfully added backend"
 }
