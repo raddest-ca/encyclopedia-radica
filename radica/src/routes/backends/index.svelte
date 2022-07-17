@@ -35,6 +35,8 @@
 			});
 			return x;
 		});
+		name = "";
+		uri = "";
 		success = true;
 		clearTimeout(successHandle);
 		successHandle = setTimeout(() => (success = false), 2000);
@@ -61,7 +63,9 @@
 	{:else}
 		<div class="flex flex-wrap justify-around">
 			{#each $backends as backend}
-				<div class="rounded bg-neutral p-1 m-1 flex-auto max-w-lg">
+				<div
+					class="rounded bg-neutral p-1 m-1 flex-auto max-w-lg shadow-xl border-primary border-2"
+				>
 					<!-- Name -->
 					<span class="text-lg text-neutral-content mr-5">{backend.name}</span>
 
@@ -142,7 +146,10 @@
 	</form>
 
 	{#if success}
-		<div class="alert alert-success shadow-lg my-2" transition:fly={{ y: 50, duration: 1000 }}>
+		<div
+			class="alert alert-success shadow-lg my-2 max-w-lg"
+			transition:fly={{ y: 50, duration: 1000 }}
+		>
 			<div>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +168,7 @@
 		</div>
 	{/if}
 	{#each errors as e}
-		<div class="alert alert-warning shadow-lg my-2">
+		<div class="alert alert-warning shadow-lg my-2 max-w-lg">
 			<div>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
