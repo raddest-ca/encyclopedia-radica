@@ -1,4 +1,4 @@
-// const defaultTheme = require("tailwindcss/defaultTheme");
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -19,9 +19,11 @@ module.exports = {
 
       'sm': {'max': '639px'},
       // => @media (max-width: 639px) { ... }
+      "xs": {"max":"360px"},
 
-      "xs": {"max": "360px"},
     },
+    //   ...defaultTheme.screens
+    // },
     extend: {
     },
   },

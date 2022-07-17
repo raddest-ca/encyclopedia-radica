@@ -4,7 +4,7 @@
 
 <div class="content m-2">
 	<div class="flex flex-wrap">
-		<a href="things/type">
+		<a href="things/meme">
 			<div
 				class="card transition-all card-side h-48 w-96 bg-base-100 shadow-xl border-primary border-2 m-2 image-full"
 			>

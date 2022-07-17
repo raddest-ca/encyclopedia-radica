@@ -15,7 +15,6 @@
     "count.things": "Thing Count",
     "count.relationships": "Relationship Count",
     "route.things.type.index.discovered": "Discovered {count} types.",
-    "route.things.type.index.header": "Types",
     "route.index.header": "Howdy.",
     "route.index.body": "My potions are too strong for you, traveller.",
     "route.index.getstarted": "I want only your strongest potions",
