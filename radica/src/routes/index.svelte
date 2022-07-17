@@ -2,7 +2,7 @@
 	import { _ } from "svelte-i18n";
 </script>
 
-<div class="hero min-h-full overflow-hidden bg-base-200">
+<div class="hero overflow-hidden bg-base-200" style="min-height:calc(100vh - 4rem)">
 	<div class="hero-content text-center">
 		<div class="max-w-md">
 			<h1 class="text-5xl font-bold">{$_("route.index.header")}</h1>

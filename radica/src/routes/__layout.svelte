@@ -5,10 +5,9 @@
 	setupI18n();
 </script>
 
-<div class="navbar bg-base-200" style="height: 4rem">
-	<Navigation />
-</div>
+<Navigation />
 
-<main style="height: calc(100vh - 4rem)">
+<main>
+	<!-- <main style="height: calc(100vh - 4rem)"> -->
 	<slot />
 </main>
