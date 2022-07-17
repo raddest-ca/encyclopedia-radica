@@ -3,27 +3,38 @@
 	import { backends, type Backend } from "$lib/backends";
 	import { fly } from "svelte/transition";
 
+	function validate(submitting: boolean) {
+		const old = errors;
+		errors = [];
+		if (name.length === 0) {
+			errors.push(
+				$_("warning.required", { values: { name: $_("route.backends.index.form.name") } }),
+			);
+		}
+		if (uri.length === 0) {
+			errors.push(
+				$_("warning.required", { values: { name: $_("route.backends.index.form.uri") } }),
+			);
+		}
+		if (!submitting) errors = errors.filter((x) => old.includes(x));
+		else errors = errors;
+
+		return (valid = errors.length === 0);
+	}
+
 	function addBlank() {
 		name = name.trim();
 		uri = uri.trim();
-		errors = [];
-		if (name.length === 0) {
-			errors.push("Name bad");
-		}
-		if (uri.length === 0) {
-			errors.push("Uri bad");
-		}
-		errors = errors;
-		if (errors.length > 0) return;
-		// backends.update((x) => {
-		// 	x.push({
-		// 		name,
-		// 		active: false,
-		// 		uri,
-		// 		comment: "",
-		// 	});
-		// 	return x;
-		// });
+		if (!validate(true)) return;
+		backends.update((x) => {
+			x.push({
+				name,
+				active: false,
+				uri,
+				comment: "",
+			});
+			return x;
+		});
 		success = true;
 		clearTimeout(successHandle);
 		successHandle = setTimeout(() => (success = false), 2000);
@@ -33,8 +44,9 @@
 		backends.update((x) => x.filter((y) => y !== backend));
 	}
 
-	let errors: string[] = ["beans", "deas"];
+	let errors: string[] = [];
 
+	let valid = false;
 	let success = false;
 	let successHandle: NodeJS.Timeout | undefined;
 
@@ -91,8 +103,46 @@
 
 	<h1 class="text-xl mt-7">{$_("route.backends.index.form.header")}</h1>
 
+	<form style="margin-m">
+		<div class="form-control w-full max-w-xs">
+			<label for="name" class="label">
+				<span class="label-text"> {$_("route.backends.index.form.name")}</span>
+				<span class="label-text-alt text-red-500">{$_("required")}</span>
+			</label>
+			<input
+				id="name"
+				type="text"
+				placeholder={$_("route.backends.index.form.name.placeholder")}
+				class="input input-bordered w-full max-w-xs"
+				bind:value={name}
+				required
+				on:input={() => validate(false)}
+			/>
+		</div>
+		<div class="form-control w-full max-w-xl">
+			<label for="name" class="label">
+				<span class="label-text"> {$_("route.backends.index.form.uri")}</span>
+				<span class="label-text-alt text-red-500">{$_("required")}</span>
+			</label>
+			<input
+				id="name"
+				type="text"
+				placeholder={$_("route.backends.index.form.uri.placeholder")}
+				class="input input-bordered w-full max-w-xl"
+				bind:value={uri}
+				on:input={() => validate(false)}
+				required
+			/>
+		</div>
+		<div class="form-control max-w-fit mt-2">
+			<button on:click|preventDefault={addBlank} type="submit" class="btn btn-primary"
+				>{$_("route.backends.index.addButton")}</button
+			>
+		</div>
+	</form>
+
 	{#if success}
-		<div class="alert alert-success shadow-lg" transition:fly={{ y: 50, duration: 1000 }}>
+		<div class="alert alert-success shadow-lg my-2" transition:fly={{ y: 50, duration: 1000 }}>
 			<div>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +161,7 @@
 		</div>
 	{/if}
 	{#each errors as e}
-		<div class="alert alert-warning shadow-lg">
+		<div class="alert alert-warning shadow-lg my-2">
 			<div>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -129,39 +179,4 @@
 			</div>
 		</div>
 	{/each}
-	<form class="ml-1">
-		<div class="form-control w-full max-w-xs">
-			<label for="name" class="label">
-				<span class="label-text"> {$_("route.backends.index.form.name")}</span>
-				<span class="label-text-alt text-red-500">{$_("required")}</span>
-			</label>
-			<input
-				id="name"
-				type="text"
-				placeholder={$_("route.backends.index.form.name.placeholder")}
-				class="input input-bordered w-full max-w-xs"
-				bind:value={name}
-				required
-			/>
-		</div>
-		<div class="form-control w-full max-w-xl">
-			<label for="name" class="label">
-				<span class="label-text"> {$_("route.backends.index.form.uri")}</span>
-				<span class="label-text-alt text-red-500">{$_("required")}</span>
-			</label>
-			<input
-				id="name"
-				type="text"
-				placeholder={$_("route.backends.index.form.uri.placeholder")}
-				class="input input-bordered w-full max-w-xl"
-				bind:value={uri}
-				required
-			/>
-		</div>
-		<div class="form-control max-w-fit mt-2">
-			<button on:click|preventDefault={addBlank} type="submit" class="btn btn-primary"
-				>{$_("route.backends.index.addButton")}</button
-			>
-		</div>
-	</form>
 </div>

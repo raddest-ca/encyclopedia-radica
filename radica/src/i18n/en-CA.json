@@ -10,6 +10,7 @@
     "name": "Name",
     "count": "Count",
     "required": "Required",
+    "warning.required": "{name} is required.",
     "action.browser.back": "Back",
     "count.things": "Thing Count",
     "count.relationships": "Relationship Count",
