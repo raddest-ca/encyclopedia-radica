@@ -5,18 +5,16 @@
 	$: active = $backends.filter((x) => x.active).length;
 </script>
 
-<div class="navbar bg-base-200">
-	<div class="navbar-start">
-		<a href="/" class="btn btn-ghost normal-case text-xl">{$_("nav.name")}</a>
-	</div>
-	<div class="navbar-end">
-		<a href="/backends" class="hover:link-hover">
-			{$_("nav.backends", {
-				values: {
-					active,
-					total: $backends.length,
-				},
-			})}
-		</a>
-	</div>
+<div class="navbar-start">
+	<a href="/" class="btn btn-ghost normal-case text-xl">{$_("nav.name")}</a>
+</div>
+<div class="navbar-end">
+	<a href="/backends" class="hover:link-hover">
+		{$_("nav.backends", {
+			values: {
+				active,
+				total: $backends.length,
+			},
+		})}
+	</a>
 </div>

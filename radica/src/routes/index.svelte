@@ -1,7 +1,18 @@
 <script lang="ts">
-	import type { Thing } from "$lib/core";
-	import { mapRelationship } from "$lib/data-helper";
-	import { getRelationships, getThings } from "$lib/requesting";
+	import { _ } from "svelte-i18n";
 </script>
 
-<a href="/things" class="link">Browse the things</a>
+<div class="hero min-h-full overflow-hidden bg-base-200">
+	<div class="hero-content text-center">
+		<div class="max-w-md">
+			<h1 class="text-5xl font-bold">{$_("route.index.header")}</h1>
+
+			<p class="py-6">
+				{$_("route.index.body")}
+			</p>
+			<a href="/things">
+				<button class="btn btn-primary"> {$_("route.index.getstarted")}</button>
+			</a>
+		</div>
+	</div>
+</div>
