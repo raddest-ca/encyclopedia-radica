@@ -24,43 +24,51 @@
 	export let things: Required<ThingResults>;
 </script>
 
-<h1><a href="./">{$_("route.things.type.index.header")}</a></h1>
+<div class="place-content-center drop-shadow-2xl w-2/3 mx-auto mt-10 rounded-xl p-4 bg-base-200">
+	<p>
+		{$_("route.things.type.index.discovered", {
+			values: {
+				count: things.count,
+			},
+		})}
+	</p>
 
-<p>
-	{$_("route.things.type.index.discovered", {
-		values: {
-			count: things.count,
-		},
-	})}
-</p>
-
-<table>
-	<thead>
-		<tr>
-			<th colspan="2">{$_("type")}</th>
-		</tr>
-		<tr>
-			<th>{$_("id")}</th>
-			<th>{$_("version")}</th>
-			<th>{$_("id")}</th>
-		</tr>
-	</thead>
-	<tbody>
-		{#each things.values as thing, i}
+	<table class="mt-2">
+		<thead>
 			<tr>
-				<td>{thing.type.id}</td>
-				<td>{thing.type.version}</td>
-				<td><a href="../{thing.type.id}/{thing.id}">{thing.id}</a></td>
+				<th id="type" colspan="2">{$_("type")}</th>
 			</tr>
-		{/each}
-	</tbody>
-</table>
+			<tr>
+				<th id="typeid">{$_("id")}</th>
+				<th id="typeversion">{$_("version")}</th>
+				<th>{$_("id")}</th>
+				<th>{$_("count.things")}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each things.values as thing, i}
+				<tr>
+					<td>{thing.type.id}</td>
+					<td>{thing.type.version}</td>
+					<td><a href="../{thing.type.id}/{thing.id}">{thing.id}</a></td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
 
 <style>
 	th {
-		border: 2px solid black;
+		@apply bg-primary text-primary-content;
 	}
-	td {
-		border: 1px solid black;
+	td,
+	th {
+		@apply m-2 p-2 border-2 border-primary;
+	}
+
+	#type,
+	#typeid,
+	#typeversion {
+		@apply bg-primary-focus;
 	}
 </style>

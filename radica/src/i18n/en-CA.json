@@ -18,7 +18,6 @@
     "route.index.header": "Howdy.",
     "route.index.body": "My potions are too strong for you, traveller.",
     "route.index.getstarted": "I want only your strongest potions",
-    "route.things.index.header":"Things",
     "route.things.index.card.types.header":"Types",
     "route.things.index.card.memes.header":"Memes",
     "route.backends.index.header": "Backends",
