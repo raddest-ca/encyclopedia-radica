@@ -66,7 +66,7 @@
 		<div class="flex flex-wrap justify-around">
 			{#each $backends as backend}
 				<div
-					class="rounded bg-neutral p-1 m-1 flex-auto max-w-lg shadow-xl border-primary border-2"
+					class="rounded bg-neutral p-1 px-2 m-1 flex-auto max-w-lg shadow-xl border-primary border-2"
 				>
 					<!-- Name -->
 					<span class="text-lg text-neutral-content mr-5">{backend.name}</span>
