@@ -1,4 +1,5 @@
 {
+    "nav.name": "Encyclopedia Radica",
     "nav.home": "Home",
     "nav.backends": "Using {active} of {total} backends.",
     "loading": "Loading",
