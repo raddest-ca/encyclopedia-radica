@@ -22,8 +22,8 @@ export const knownTypes = {
 	language: { id: "language", version },
 
 	style: { id: "style", version },
+	tag: { id: "tag", version },
 
-	meme: { id: "meme", version },
 };
 
 // export type KnownType = typeof knownTypes[keyof typeof knownTypes];

@@ -29,6 +29,6 @@
     "route.index.body": "My potions are too strong for you, traveller.",
     "route.index.getstarted": "I want only your strongest potions",
     "route.things.index.card.types.header":"Types",
-    "route.things.index.card.memes.header":"Memes",
-    "route.things.meme.index.discovered": "Discovered {count} memes."
+    "route.things.index.card.videos.header":"Videos",
+    "route.things.video.index.discovered": "Discovered {count} videos."
 }

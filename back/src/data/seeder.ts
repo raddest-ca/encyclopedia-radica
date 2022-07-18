@@ -20,15 +20,14 @@ export function addData(store: Store) {
 	add(en);
 	add(...name(en, en, "English").all);
 
-	{
-		const meme = thing(knownTypes.meme);
-		add(meme);
-		add(...meta(meme, new Date("2021-05-22T14:59-04:00")).all)
+	const meme = thing(knownTypes.tag, "meme");
+	add(meme);
 
-		add(...name(meme, en, "Scooby schwee").all);
-
+	{		
 		const video = thing(knownTypes.video);
 		add(video);
+		add(...meta(video, new Date("2021-05-22T14:59-04:00")).all)
+		add(...name(video, en, "Scooby schwee").all);
 
 		let _link = link(
 			video,
@@ -36,20 +35,22 @@ export function addData(store: Store) {
 		);
 		add(..._link.all);
 
+		add(rel(video, knownTypes.tag, meme));
+
 		const lain = thing(knownTypes.character);
 		add(lain);
 		add(...name(lain, en, "Lain").all);
-		add(rel(meme, knownTypes.character, lain));
+		add(rel(video, knownTypes.character, lain));
 
 		const scooby = thing(knownTypes.character);
 		add(scooby);
 		add(...name(scooby, en, "Scooby Doo").all);
-		add(rel(meme, knownTypes.character, scooby));
+		add(rel(video, knownTypes.character, scooby));
 
 		const shaggy = thing(knownTypes.character);
 		add(shaggy);
 		add(...name(shaggy, en, "Shaggy").all);
-		add(rel(meme, knownTypes.character, shaggy));
+		add(rel(video, knownTypes.character, shaggy));
 
 		let content = `(speaking Japanese)
 Lain: "What's wrong?"
@@ -59,16 +60,16 @@ Lain turns to see Scooby Doo sitting on the ground.
 Scooby Doo transforms into a car while saying "A-schweee".
 Shaggy hops into the car, and it drives off the right of the frame.
 Cuts to Lain looking slightly surprised.`;
-		add(...transcribe(meme, en, content).all);
+		add(...transcribe(video, en, content).all);
 
 		let style = thing(knownTypes.style);
 		add(style);
 		add(...name(style, en, "Cel Animation").all);
-		add(rel(meme, knownTypes.style, style));
+		add(rel(video, knownTypes.style, style));
 
 		style = thing(knownTypes.style);
 		add(style);
 		add(...name(style, en, "Anime").all);
-		add(rel(meme, knownTypes.style, style));
+		add(rel(video, knownTypes.style, style));
 	}
 }

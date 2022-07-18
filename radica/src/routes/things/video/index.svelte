@@ -5,7 +5,7 @@
 		const things = await getThings({
 			filter: {
 				type: {
-					id: knownTypes.meme.id,
+					id: knownTypes.video.id,
 				},
 			},
 		});
@@ -62,7 +62,7 @@
 
 <main class="place-content-center drop-shadow-2xl w-96 m-auto mt-10 rounded-xl p-4 bg-base-200">
 	<p>
-		{$_("route.things.meme.index.discovered", {
+		{$_("route.things.video.index.discovered", {
 			values: {
 				count: things.count,
 			},
