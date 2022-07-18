@@ -50,7 +50,7 @@
 				<tr>
 					<td>{thing.type.id}</td>
 					<td>{thing.type.version}</td>
-					<td><a href="../{thing.type.id}/{thing.id}">{thing.id}</a></td>
+					<td><a class="link" href="../{thing.type.id}/{thing.id}">{thing.id}</a></td>
 				</tr>
 			{/each}
 		</tbody>

@@ -66,7 +66,7 @@
 				<tr>
 					<td>{thing.type.id}</td>
 					<td>{thing.type.version}</td>
-					<td><a href="./type/{thing.id}">{thing.id}</a></td>
+					<td><a class="link" href="./type/{thing.id}">{thing.id}</a></td>
 					<td>{thingCounts[i]?.count}</td>
 				</tr>
 			{/each}
