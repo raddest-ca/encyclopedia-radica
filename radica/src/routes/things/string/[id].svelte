@@ -31,6 +31,7 @@
 <style>
 	#id {
 		/* font-size: 66pt; */
+		word-wrap: break-word;
 	}
 	.lquo {
 		position: absolute;
