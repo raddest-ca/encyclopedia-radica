@@ -54,7 +54,7 @@
 
 	function getHref(thing: Thing) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
-		const rtn = `./type/${encodeURIComponent(encodeURIComponent(thing.id))}/`;
+		const rtn = `./type/${encodeURIComponent(thing.id)}/`;
 		console.log("got", rtn);
 		return rtn;
 	}
@@ -71,15 +71,14 @@
 
 	<div class="flex flex-wrap">
 		{#each things.values as thing, i}
-			<!-- {@const uri = uriLookup.get(thing.id)} -->
+			{@const uri = uriLookup.get(thing.id)}
 
-			<a class="link" href={getHref(thing)}>
-				<div>
-					<!-- {uri} -->
-					<!-- {#if uriLookup.get(thing.id).endsWith("mp4")}{/if} -->
-					{thing.id}
-				</div></a
-			>
+			<div>
+				{#if uriLookup.get(thing.id)?.endsWith("mp4")}
+					<video src={uri} />
+				{/if}
+				<a class="link" href={getHref(thing)}> {thing.id} </a>
+			</div>
 		{/each}
 	</div>
 </main>

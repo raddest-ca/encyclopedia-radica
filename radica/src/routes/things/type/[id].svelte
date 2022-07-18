@@ -5,7 +5,7 @@
 		const things = await getThings({
 			filter: {
 				type: {
-					id: params.id,
+					id: decodeURIComponent(params.id),
 				},
 			},
 		});
@@ -26,9 +26,7 @@
 
 	function getHref(thing: Thing) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
-		const rtn = `../${encodeURIComponent(encodeURIComponent(thing.type.id))}/${encodeURIComponent(
-			encodeURIComponent(thing.id),
-		)}`;
+		const rtn = `../${encodeURIComponent(thing.type.id)}/${encodeURIComponent(thing.id)}`;
 		console.log("got", rtn);
 		return rtn;
 	}
@@ -52,6 +50,7 @@
 				<th id="typeid">{$_("id")}</th>
 				<th id="typeversion">{$_("version")}</th>
 				<th>{$_("id")}</th>
+				<th>{$_("count.things")}</th>
 			</tr>
 		</thead>
 		<tbody>

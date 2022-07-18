@@ -4,7 +4,7 @@
 	export async function load({ params }: LoadEvent): Promise<LoadOutput> {
 		return {
 			props: {
-				id: params.id,
+				id: decodeURIComponent(params.id),
 			},
 		};
 	}

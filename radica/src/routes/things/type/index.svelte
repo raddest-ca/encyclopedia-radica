@@ -43,7 +43,7 @@
 
 	function getHref(thing: Thing) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
-		const rtn = `./type/${encodeURIComponent(encodeURIComponent(thing.id))}/`;
+		const rtn = `./type/${encodeURIComponent(thing.id)}/`;
 		console.log("got", rtn);
 		return rtn;
 	}

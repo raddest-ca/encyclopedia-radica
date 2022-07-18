@@ -14,6 +14,8 @@
     "action.browser.back": "Back",
     "count.things": "Thing Count",
     "count.relationships": "Relationship Count",
+    "route.things.unhandled_type.body": "There is no renderer available for this type.",
+    "route.things.unhandled_type.view_type": "View raw type",
     "route.backends.index.header": "Backends",
     "route.backends.index.none": "No backends found.",
     "route.backends.index.addButton": "Add",
