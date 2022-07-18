@@ -36,14 +36,14 @@
 	.lquo {
 		position: absolute;
 		left: -80px;
-		top: -50%;
+		top: -20%;
 		font-size: 99pt;
 		user-select: none;
 	}
 	.rquo {
 		position: absolute;
 		left: calc(100% + 30px);
-		top: -50%;
+		top: -20%;
 		font-size: 99pt;
 		user-select: none;
 	}
