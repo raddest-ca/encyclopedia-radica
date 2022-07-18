@@ -8,11 +8,15 @@ export function toMap<T,Y>(list: T[], propGetter: (v:T) => string, valueGetter: 
 }
 
 export function mapRelationship(rels: Relationship[]) {
-    console.log("relz", rels);
     return rels.reduce((map, v) => {
-        map.set(v.left.id, v.right.id);
+        const existing = map.get(v.left.id);
+        if (existing !== undefined) {
+            existing.push(v.right.id);
+        } else {
+            map.set(v.left.id, [v.right.id]);
+        }
         return map;
-    }, new Map<string, string>);
+    }, new Map<string, Array<string>>);
 }
 
 // export function join(things: Thing[], rels: Relationship[], side: "left" | "right") {

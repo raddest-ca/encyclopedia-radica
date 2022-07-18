@@ -2,7 +2,7 @@
 	import type { LoadEvent, LoadOutput } from "@sveltejs/kit";
 
 	export async function load({ fetch, params }: LoadEvent): Promise<LoadOutput> {
-		const things = await getThings({
+		const things = await getThings(fetch, {
 			filter: {
 				type: {
 					id: knownTypes.video.id,
@@ -10,6 +10,7 @@
 			},
 		});
 		const uris = await getCollatedRelationships(
+			fetch,
 			things.values!.map((thing) => ({
 				filter: {
 					left: {
@@ -49,13 +50,15 @@
 	export let things: Required<ThingResults>;
 	export let uris: Required<RelationshipResults>;
 
-	$: console.log("got", uris);
 	$: uriLookup = mapRelationship(uris.values ?? []);
+
+	function getFileType(uri: string) {
+		return uri.substr(uri.lastIndexOf(".") + 1);
+	}
 
 	function getHref(thing: Thing) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
-		const rtn = `./type/${encodeURIComponent(thing.id)}/`;
-		console.log("got", rtn);
+		const rtn = `./type/video/${encodeURIComponent(thing.id)}/`;
 		return rtn;
 	}
 </script>
@@ -74,10 +77,12 @@
 			{@const uri = uriLookup.get(thing.id)}
 
 			<div>
-				{#if uriLookup.get(thing.id)?.endsWith("mp4")}
-					<video src={uri} />
-				{/if}
-				<a class="link" href={getHref(thing)}> {thing.id} </a>
+				<video controls>
+					{#each uriLookup.get(thing.id) as uri}
+						<source src={uri} type="video/{getFileType(uri)}" />
+					{/each}
+				</video>
+				<!-- <a class="link" href={getHref(thing)}> {thing.id} </a> -->
 			</div>
 		{/each}
 	</div>

@@ -1,4 +1,5 @@
 import type { Relationship, Thing } from "./core";
+import type { LoadEvent } from "@sveltejs/kit";
 import type { DeepPartial } from "tsdef";
 export interface ThingQuery {
 	filter: DeepPartial<Thing>;
@@ -9,7 +10,9 @@ export interface RelationshipQuery {
 	countOnly?: boolean;
 }
 
-export async function getThings(body: ThingQuery) {
+export type FetchFunc = typeof fetch | LoadEvent["fetch"];
+
+export async function getThings(fetch: FetchFunc, body: ThingQuery) {
 	console.log("Requesting things with body", body);
 	const req = await fetch("http://localhost:8080/things", {
 		headers: {
@@ -25,7 +28,7 @@ export async function getThings(body: ThingQuery) {
 }
 export type ThingResults = Awaited<ReturnType<typeof getThings>>;
 
-export async function getRelationships(body: RelationshipQuery) {
+export async function getRelationships(fetch: FetchFunc, body: RelationshipQuery) {
 	console.log("Requesting relationships with query", body);
 	const req = await fetch("http://localhost:8080/rels", {
 		headers: {
@@ -40,8 +43,8 @@ export async function getRelationships(body: RelationshipQuery) {
 	};
 }
 
-export async function getCollatedRelationships(bodies: RelationshipQuery[]) {
-	const res = await Promise.all(bodies.map((b) => getRelationships(b)));
+export async function getCollatedRelationships(fetch: FetchFunc, bodies: RelationshipQuery[]) {
+	const res = await Promise.all(bodies.map((b) => getRelationships(fetch, b)));
 	return res.reduce(
 		(acc, v) => {
 			acc.values?.push(...(v.values ?? []));

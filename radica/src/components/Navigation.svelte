@@ -9,8 +9,6 @@
 		.split("/")
 		.map((x) => decodeURIComponent(x));
 
-	$: console.log($page.url.pathname.substr(1).split("/"));
-
 	function getHref(index: number, crumbs: string[]) {
 		return "/" + crumbs.slice(0, index + 1).join("/");
 	}

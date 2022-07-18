@@ -2,7 +2,7 @@
 	import type { LoadEvent, LoadOutput } from "@sveltejs/kit";
 
 	export async function load({ fetch, params }: LoadEvent): Promise<LoadOutput> {
-		const things = await getThings({
+		const things = await getThings(fetch, {
 			filter: {
 				type: {
 					id: decodeURIComponent(params.id),
@@ -27,7 +27,6 @@
 	function getHref(thing: Thing) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
 		const rtn = `../${encodeURIComponent(thing.type.id)}/${encodeURIComponent(thing.id)}`;
-		console.log("got", rtn);
 		return rtn;
 	}
 </script>
