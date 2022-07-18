@@ -58,7 +58,7 @@
 
 	function getHref(thing: Thing) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
-		const rtn = `./type/video/${encodeURIComponent(thing.id)}/`;
+		const rtn = `./video/${encodeURIComponent(thing.id)}/`;
 		return rtn;
 	}
 </script>
@@ -76,13 +76,13 @@
 		{#each things.values as thing, i}
 			{@const uri = uriLookup.get(thing.id)}
 
-			<div>
+			<div class="bg-base-300 border-primary border-2 p-2 rounded-xl">
+				<a class="link" href={getHref(thing)}> {thing.id} </a>
 				<video controls>
 					{#each uriLookup.get(thing.id) as uri}
 						<source src={uri} type="video/{getFileType(uri)}" />
 					{/each}
 				</video>
-				<!-- <a class="link" href={getHref(thing)}> {thing.id} </a> -->
 			</div>
 		{/each}
 	</div>
