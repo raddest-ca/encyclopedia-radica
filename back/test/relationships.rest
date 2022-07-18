@@ -1,0 +1,24 @@
+POST http://localhost:8080/rels 
+Content-Type: application/json
+
+{
+	"filter": {
+		"left": {
+			"id": "076210aa-6072-432c-bbfd-c9bf6e82c8b1",
+			"type": {
+				"id": "video",
+				"version": "1.0.0"
+			}
+		},
+		"nature": {
+			"id": "uri",
+			"version": "1.0.0"
+		},
+		"right": {
+			"type": {
+				"id": "string",
+				"version": "1.0.0"
+			}
+		}
+	}
+}

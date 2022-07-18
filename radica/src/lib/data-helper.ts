@@ -8,6 +8,7 @@ export function toMap<T,Y>(list: T[], propGetter: (v:T) => string, valueGetter: 
 }
 
 export function mapRelationship(rels: Relationship[]) {
+    console.log("relz", rels);
     return rels.reduce((map, v) => {
         map.set(v.left.id, v.right.id);
         return map;

@@ -18,10 +18,10 @@ export class App {
 			res.send("Howdy!");
 		});
 		this.express.post("/things", (req, res) => {
-			res.json(this.store.getThings(req.body.body as ThingQuery));
+			res.json(this.store.getThings(req.body as ThingQuery));
 		});
 		this.express.post("/rels", (req, res) => {
-			res.json(this.store.getRelationships(req.body.body as RelationshipQuery));
+			res.json(this.store.getRelationships(req.body as RelationshipQuery));
 		});
 	}
 

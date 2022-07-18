@@ -5,27 +5,28 @@
 		const things = await getThings({
 			filter: {
 				type: {
-					id: knownTypes.type.id,
+					id: knownTypes.meme.id,
 				},
 			},
 		});
-		const thingCounts = await Promise.all(
-			things.values!.map((x) =>
-				getThings({
-					filter: {
-						type: {
-							id: x.id,
-						},
+		const uris = await getCollatedRelationships(
+			things.values!.map((thing) => ({
+				filter: {
+					left: {
+						id: thing.id,
+						type: thing.type,
 					},
-					countOnly: true,
-				}),
-			),
+					nature: knownTypes.uri,
+					right: {
+						type: knownTypes.string,
+					},
+				},
+			})),
 		);
-
 		return {
 			props: {
 				things,
-				thingCounts,
+				uris,
 				// ids,
 			},
 		};
@@ -33,13 +34,23 @@
 </script>
 
 <script lang="ts">
-	import { getThings, type ThingResults } from "$lib/requesting";
+	import {
+		getCollatedRelationships,
+		getRelationships,
+		getThings,
+		type RelationshipResults,
+		type ThingResults,
+	} from "$lib/requesting";
 	import { _ } from "svelte-i18n";
 	import { knownTypes } from "$lib/known-types";
 	import type { Thing } from "$lib/core";
+	import { mapRelationship } from "$lib/data-helper";
 
 	export let things: Required<ThingResults>;
-	export let thingCounts: ThingResults[];
+	export let uris: Required<RelationshipResults>;
+
+	$: console.log("got", uris);
+	$: uriLookup = mapRelationship(uris.values ?? []);
 
 	function getHref(thing: Thing) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
@@ -51,35 +62,26 @@
 
 <main class="place-content-center drop-shadow-2xl w-96 m-auto mt-10 rounded-xl p-4 bg-base-200">
 	<p>
-		{$_("route.things.type.index.discovered", {
+		{$_("route.things.meme.index.discovered", {
 			values: {
 				count: things.count,
 			},
 		})}
 	</p>
-	<table class="mt-2">
-		<thead>
-			<tr>
-				<th id="type" colspan="2">{$_("type")}</th>
-			</tr>
-			<tr>
-				<th id="typeid">{$_("id")}</th>
-				<th id="typeversion">{$_("version")}</th>
-				<th>{$_("id")}</th>
-				<th>{$_("count.things")}</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each things.values as thing, i}
-				<tr>
-					<td>{thing.type.id}</td>
-					<td>{thing.type.version}</td>
-					<td><a class="link" href={getHref(thing)}>{thing.id}</a></td>
-					<td>{thingCounts[i]?.count}</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+
+	<div class="flex flex-wrap">
+		{#each things.values as thing, i}
+			<!-- {@const uri = uriLookup.get(thing.id)} -->
+
+			<a class="link" href={getHref(thing)}>
+				<div>
+					<!-- {uri} -->
+					<!-- {#if uriLookup.get(thing.id).endsWith("mp4")}{/if} -->
+					{thing.id}
+				</div></a
+			>
+		{/each}
+	</div>
 </main>
 
 <style>
