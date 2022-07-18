@@ -34,7 +34,7 @@
 	}
 </script>
 
-<div class="place-content-center drop-shadow-2xl w-2/3 mx-auto mt-10 rounded-xl p-4 bg-base-200">
+<main class="place-content-center drop-shadow-2xl w-2/3 mx-auto mt-10 rounded-xl p-4 bg-base-200">
 	<p>
 		{$_("route.things.type.index.discovered", {
 			values: {
@@ -65,7 +65,7 @@
 			{/each}
 		</tbody>
 	</table>
-</div>
+</main>
 
 <style>
 	th {

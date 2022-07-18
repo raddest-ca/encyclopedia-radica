@@ -7,7 +7,4 @@
 
 <Navigation />
 
-<main>
-	<!-- <main style="height: calc(100vh - 4rem)"> -->
-	<slot />
-</main>
+<slot />

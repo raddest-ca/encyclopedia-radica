@@ -13,7 +13,12 @@
 	const anim: FlyParams = {};
 </script>
 
-<button type="button" class="cursor-pointer" on:click={() => save(value)}>
+<button
+	type="button"
+	class="cursor-pointer"
+	aria-label="copy to clipboard"
+	on:click={() => save(value)}
+>
 	{#if notif}
 		<svg
 			in:fly={{ y: 200, duration: 200 }}

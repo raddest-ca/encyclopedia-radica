@@ -2,7 +2,7 @@
 	import { _ } from "svelte-i18n";
 </script>
 
-<div class="content m-2">
+<main class="content m-2">
 	<div class="flex flex-wrap">
 		<a href="things/meme">
 			<div
@@ -31,7 +31,7 @@
 			</div>
 		</a>
 	</div>
-</div>
+</main>
 
 <style>
 	img {
