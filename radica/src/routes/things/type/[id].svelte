@@ -52,7 +52,6 @@
 				<th id="typeid">{$_("id")}</th>
 				<th id="typeversion">{$_("version")}</th>
 				<th>{$_("id")}</th>
-				<th>{$_("count.things")}</th>
 			</tr>
 		</thead>
 		<tbody>
