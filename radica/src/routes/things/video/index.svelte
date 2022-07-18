@@ -47,8 +47,8 @@
 	import type { Thing } from "$lib/core";
 	import { mapRelationship } from "$lib/data-helper";
 
-	export let things: Required<ThingResults>;
-	export let uris: Required<RelationshipResults>;
+	export let things: ThingResults;
+	export let uris: RelationshipResults;
 
 	$: uriLookup = mapRelationship(uris.values ?? []);
 

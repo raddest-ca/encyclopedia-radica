@@ -40,8 +40,9 @@ export class Store {
 		}
 		const rtn = this.things.filter(pred);
 		return {
-			values: query.countOnly === true ? undefined : rtn,
+			values: query.countOnly ? [] : rtn,
 			count: rtn.length,
+			countOnly: query.countOnly ?? false,
 		};
 	}
 
@@ -82,8 +83,9 @@ export class Store {
 		}
 		const rtn = this.relationships.filter(pred);
 		return {
-			values: query.countOnly === true ? undefined : rtn,
+			values: query.countOnly ? [] : rtn,
 			count: rtn.length,
+			countOnly: query.countOnly ?? false,
 		};
 	}
 }

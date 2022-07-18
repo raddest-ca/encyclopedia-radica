@@ -22,10 +22,26 @@ export async function getThings(fetch: FetchFunc, body: ThingQuery) {
 		body: JSON.stringify(body),
 	});
 	return (await req.json()) as {
-		values?: Thing[];
+		values: Thing[];
 		count: number;
 	};
 }
+
+export async function getCollatedThings(fetch: FetchFunc, bodies: ThingQuery[]) {
+	const res = await Promise.all(bodies.map((b) => getThings(fetch, b)));
+	return res.reduce(
+		(acc, v) => {
+			acc.values?.push(...(v.values ?? []));
+			acc.count += v.values?.length ?? 0;
+			return acc;
+		},
+		{
+			values: [],
+			count: 0,
+		},
+	);
+}
+
 export type ThingResults = Awaited<ReturnType<typeof getThings>>;
 
 export async function getRelationships(fetch: FetchFunc, body: RelationshipQuery) {
@@ -38,7 +54,7 @@ export async function getRelationships(fetch: FetchFunc, body: RelationshipQuery
 		body: JSON.stringify(body),
 	});
 	return (await req.json()) as {
-		values?: Relationship[];
+		values: Relationship[];
 		count: number;
 	};
 }

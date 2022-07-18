@@ -22,7 +22,7 @@
 	import { _ } from "svelte-i18n";
 	import type { Thing } from "$lib/core";
 
-	export let things: Required<ThingResults>;
+	export let things: ThingResults;
 
 	function getHref(thing: Thing) {
 		// since going in an href attrib as-is, needs to be sanitized twice.

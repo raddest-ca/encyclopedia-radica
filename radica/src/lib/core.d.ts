@@ -12,7 +12,7 @@ export interface Thing {
 
 export interface Relationship {
 	version: Atom;
-	nature: Type;
+	type: Type;
 	left: Thing;
 	right: Thing;
 }
