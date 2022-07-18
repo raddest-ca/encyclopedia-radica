@@ -20,8 +20,18 @@
 <script lang="ts">
 	import { getThings, type ThingResults } from "$lib/requesting";
 	import { _ } from "svelte-i18n";
+	import type { Thing } from "$lib/core";
 
 	export let things: Required<ThingResults>;
+
+	function getHref(thing: Thing) {
+		// since going in an href attrib as-is, needs to be sanitized twice.
+		const rtn = `../${encodeURIComponent(encodeURIComponent(thing.type.id))}/${encodeURIComponent(
+			encodeURIComponent(thing.id),
+		)}`;
+		console.log("got", rtn);
+		return rtn;
+	}
 </script>
 
 <div class="place-content-center drop-shadow-2xl w-2/3 mx-auto mt-10 rounded-xl p-4 bg-base-200">
@@ -50,7 +60,7 @@
 				<tr>
 					<td>{thing.type.id}</td>
 					<td>{thing.type.version}</td>
-					<td><a class="link" href="../{thing.type.id}/{thing.id}">{thing.id}</a></td>
+					<td><a class="link" href={getHref(thing)}>{thing.id}</a></td>
 				</tr>
 			{/each}
 		</tbody>
