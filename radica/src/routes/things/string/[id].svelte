@@ -22,18 +22,28 @@
 		<CopyButton css="text-primary h-10 w-10 hover:text-secondary" bind:value={id} />
 	</div>
 	<div>
-		<span class="quo">&ldquo;</span>
+		<span class="lquo">&ldquo;</span>
 		<span id="id">{id}</span>
-		<span class="quo">&rdquo;</span>
+		<span class="rquo">&rdquo;</span>
 	</div>
 </div>
 
 <style>
 	#id {
-		font-size: 66pt;
-		font-size: 66pt;
+		/* font-size: 66pt; */
 	}
-	.quo {
+	.lquo {
+		position: absolute;
+		left: -80px;
+		top: -50%;
 		font-size: 99pt;
+		user-select: none;
+	}
+	.rquo {
+		position: absolute;
+		left: calc(100% + 30px);
+		top: -50%;
+		font-size: 99pt;
+		user-select: none;
 	}
 </style>
