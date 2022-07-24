@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build & node build/index.js",
-    "watch": "tsc-watch --onSuccess \"node build/index.js\"",
+    "copy-files": "cpx './static' './build'",
+    "run": "node build/index.js",
+    "watch": "tsc-watch --onSuccess \"npm-run-all copy-files run\"",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix"
   },
@@ -20,7 +22,11 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.30.3",
     "@typescript-eslint/parser": "^5.30.3",
+    "concurrently": "^7.3.0",
+    "cpx": "^1.5.0",
+    "dotenv": "^16.0.1",
     "eslint": "^8.18.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "tsc-watch": "^5.0.3",
     "tsdef": "^0.0.14",
@@ -30,6 +36,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "morgan": "^1.10.0",
+    "openid-client": "^5.1.8",
     "uuid": "^8.3.2"
   }
 }

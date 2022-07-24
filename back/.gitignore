@@ -1,2 +1,5 @@
 build
 node_modules
+.env
+static/cert.key
+static/cert.pem
