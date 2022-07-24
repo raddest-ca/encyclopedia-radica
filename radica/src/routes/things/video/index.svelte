@@ -78,6 +78,8 @@
 
 			<div class="bg-base-300 border-primary border-2 p-2 rounded-xl">
 				<a class="link" href={getHref(thing)}> {thing.id} </a>
+				<!-- TODO: find good example videos for adding caption support -->
+				<!-- svelte-ignore a11y-media-has-caption -->
 				<video controls>
 					{#each uriLookup.get(thing.id) as uri}
 						<source src={uri} type="video/{getFileType(uri)}" />

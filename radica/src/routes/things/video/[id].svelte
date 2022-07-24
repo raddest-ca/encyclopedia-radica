@@ -40,6 +40,8 @@
 <div class="flex justify-center">
 	<div class="w-40 invisible" />
 	<main class="place-content-center w-96 bg-base-300 mx-auto mt-4 p-4 rounded-xl drop-shadow-xl">
+		<!-- TODO: find good example videos for adding caption support -->
+		<!-- svelte-ignore a11y-media-has-caption -->
 		<video controls>
 			{#each uris as uri}
 				<source src={uri} type="video/{getFileType(uri)}" />
