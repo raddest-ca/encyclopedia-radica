@@ -1,10 +1,10 @@
 import { BaseClient, generators, Issuer } from "openid-client";
 import type { Express } from "express";
 import { config } from "../config";
+import type { Session, SessionData } from "express-session";
 let issuer: Issuer<BaseClient>;
 let client: BaseClient;
 
-const nonce = generators.nonce();
 
 
 export async function setup(app: Express) {
@@ -20,19 +20,25 @@ export async function setup(app: Express) {
     
     app.post("/cb", async (req, res) => {
         try {
+            if (req.session.nonce === undefined) return;
             const params = client.callbackParams(req);
-            console.log(params);
-            const tokenSet = await client.callback("https://localhost/cb", params, { nonce });
+            const tokenSet = await client.callback("https://localhost/cb", params, { nonce: req.session.nonce });
             console.log("received and validated tokens", tokenSet);
             console.log("validated ID token claims", tokenSet.claims());
-            res.send("haha");
+            delete req.session.nonce;
+            req.session.authenticated = true;
+            res.redirect("beans");
+            return;
         } catch (e) {
             console.error(e);
         }
+        res.sendStatus(500);
     });
 }
 
-export function getLoginUrl() {
+export function getLoginUrl(session: Session & Partial<SessionData>) {
+    const nonce = generators.nonce();
+    session.nonce = nonce;
     console.log("generating auth url with nonce", nonce);
     return client.authorizationUrl({
         scope: "openid email profile",

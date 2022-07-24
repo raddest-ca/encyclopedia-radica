@@ -8,6 +8,15 @@ import https from "https";
 import http from "http";
 import session from "express-session";
 import { config } from "../config";
+import passport from "passport";
+import helmet from "helmet";
+
+declare module 'express-session' {
+    interface SessionData {
+        nonce: string;
+		authenticated: boolean;
+    }
+}
 
 export class App {
 	private store: Store;
@@ -22,7 +31,9 @@ export class App {
 		this.app = express();
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
-		this.app.use(cors());
+		// this.app.use(helmet());
+		// this.app.use(passport.initialize());
+		// this.app.use(passport.session());
 		this.app.use(morgan("combined"));
 		this.app.use(session({
 			secret: config.session_secret,
@@ -41,12 +52,18 @@ export class App {
 		this.app.get("/beans", (req, res) => {
 			main();
 			// res.sendStatus(200);
-			res.send(`
-			<a href="${getLoginUrl()}">beans</a>
-			`);
+			let content = `
+			<a href="${getLoginUrl(req.session)}">beans</a>
+			`;
+			if (req.session.authenticated){
+				content += `
+				<br/>
+				<span>you are authenticated</span>
+				`;
+			}
+			res.send(content);
 			// res.send("asd");
 		});
-		setupAuth(this.app);
 
 		this.httpsServer = https.createServer(
 			{
@@ -61,7 +78,8 @@ export class App {
 		});
 	}
 
-	run(httpPort: number, httpsPort: number) {
+	async run(httpPort: number, httpsPort: number) {
+		await setupAuth(this.app);
 		this.httpsServer.listen(httpsPort, () => {
 			console.log(`Listening on https://localhost:${httpPort}`);
 		});
