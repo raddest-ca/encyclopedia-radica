@@ -6,6 +6,8 @@ import { getLoginUrl, main, setup as setupAuth  } from "../auth/issuing";
 import fs from "fs";
 import https from "https";
 import http from "http";
+import session from "express-session";
+import { config } from "../config";
 
 export class App {
 	private store: Store;
@@ -19,9 +21,14 @@ export class App {
 		
 		this.app = express();
 		this.app.use(express.json());
-		this.app.use(express.urlencoded());
+		this.app.use(express.urlencoded({ extended: true }));
 		this.app.use(cors());
 		this.app.use(morgan("combined"));
+		this.app.use(session({
+			secret: config.session_secret,
+			resave: false,
+			saveUninitialized: true,
+		}))
 		this.app.get("/", (req, res) => {
 			res.send("Howdy!");
 		});
@@ -43,8 +50,8 @@ export class App {
 
 		this.httpsServer = https.createServer(
 			{
-				key: fs.readFileSync("static/cert.key"),
-				cert: fs.readFileSync("static/cert.pem"),
+				key: fs.readFileSync("resources/cert.key"),
+				cert: fs.readFileSync("resources/cert.pem"),
 			},
 			this.app,
 		);
@@ -56,7 +63,7 @@ export class App {
 
 	run(httpPort: number, httpsPort: number) {
 		this.httpsServer.listen(httpsPort, () => {
-			console.log(`Listening on http://localhost:${httpPort}`);
+			console.log(`Listening on https://localhost:${httpPort}`);
 		});
 		this.httpServer.listen(httpPort, () => {
 			console.log(`Listening on http://localhost:${httpsPort}`);

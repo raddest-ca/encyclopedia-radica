@@ -1,5 +1,6 @@
 import { BaseClient, generators, Issuer } from "openid-client";
 import type { Express } from "express";
+import { config } from "../config";
 let issuer: Issuer<BaseClient>;
 let client: BaseClient;
 
@@ -7,11 +8,11 @@ const nonce = generators.nonce();
 
 
 export async function setup(app: Express) {
-    issuer = await Issuer.discover(`https://login.microsoftonline.com/${process.env.tenant_id}/v2.0`);
+    issuer = await Issuer.discover(`https://login.microsoftonline.com/${config.tenant_id}/v2.0`);
     // console.log("discovered", issuer.issuer, issuer.metadata);
 
     client = new issuer.Client({
-        client_id: process.env.client_id!,
+        client_id: config.client_id!,
         redirect_uris: ["https://localhost/cb"],
         response_types:["id_token"],
     });

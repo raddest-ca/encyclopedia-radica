@@ -1,5 +1,5 @@
 build
 node_modules
 .env
-static/cert.key
-static/cert.pem
+resources/cert.key
+resources/cert.pem
