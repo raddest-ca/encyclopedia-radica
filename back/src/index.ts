@@ -2,11 +2,13 @@ import { App } from "./app";
 import { addData } from "./data/seeder";
 import { Store } from "./data/store";
 import "dotenv/config";
+import { Auth } from "./auth";
 
 async function main() {
     const store = new Store();
     addData(store);
-    const app = new App(store);
+    const auth = new Auth();
+    const app = new App(store, auth);
     await app.setup();
     await app.run(80, 443);
 }

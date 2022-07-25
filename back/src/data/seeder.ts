@@ -4,10 +4,7 @@ import type { Store } from "./store";
 import { thing, rel, meta, name, transcribe, link } from "../models/helpers";
 
 export function addData(store: Store) {
-	function add(...items: Either[]): Either[] {
-		items.forEach(x => store.add(x));
-		return items;
-	}
+	const add = store.addAll.bind(store);
 
 	const types: Record<string, Thing<KnownType>> = {};
 	for (const type of Object.values(knownTypes)) {

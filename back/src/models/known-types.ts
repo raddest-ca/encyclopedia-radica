@@ -1,9 +1,21 @@
+export const a = {
+	z: 4,
+	t: "asd",
+};
+
 export const knownTypes = {
 	string: "string",
 	number: "number",
 	type: "type",
+
 	metadata: "metadata",
+
 	hash: "hash",
+	algorithm: "algorithm",
+	password: "password",
+	slug: "slug",
+	user: "user",
+
 	translation: "translation",
 	date: "date",
 	datetime: "datetime",
@@ -15,7 +27,7 @@ export const knownTypes = {
 	language: "language",
 	style: "style",
 	tag: "tag",
-	user: "user",
-};
+} as const;
 
-export type KnownType = keyof typeof knownTypes;
+export type KnownTypes = typeof knownTypes;
+export type KnownType = KnownTypes[keyof KnownTypes];

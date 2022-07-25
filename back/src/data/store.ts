@@ -29,10 +29,20 @@ export class Store {
 	private things: Array<Thing<KnownType>> = [];
 	private relationships: Array<Relationship<KnownType, KnownType, KnownType>> = [];
 
-	public add(x: Either) {
-		if (isThing(x)) this.things.push(x);
-		if (isRelationship(x)) this.relationships.push(x);
+	public async add(x: Either) {
+		// prevent adding duplicates
+		if (isThing(x) && (await this.getThings({ filter: x, countOnly: true })).count === 0)
+			this.things.push(x);
+		if (
+			isRelationship(x) &&
+			(await this.getRelationships({ filter: x, countOnly: true })).count === 0
+		)
+			this.relationships.push(x);
 		return x;
+	}
+
+	public async addAll(...items: Either[]) {
+		return await Promise.all(items.map(x => this.add(x)));
 	}
 
 	public async getThings<T extends KnownType>(query: ThingQuery<T>) {
@@ -79,7 +89,7 @@ export class Store {
 			const old = pred;
 			pred = x => old(x) && x.right.type === query.filter.right?.type;
 		}
-		const rtn = this.relationships.filter(pred) as Relationship<L,T,R>[];
+		const rtn = this.relationships.filter(pred) as Relationship<L, T, R>[];
 		return {
 			values: query.countOnly ? [] : rtn,
 			count: rtn.length,

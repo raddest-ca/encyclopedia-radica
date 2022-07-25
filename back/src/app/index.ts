@@ -8,6 +8,7 @@ import session from "express-session";
 import { config } from "../config";
 import passport from "passport";
 import helmet from "helmet";
+import { Auth } from "../auth";
 
 declare module 'express-session' {
     interface SessionData {
@@ -19,11 +20,14 @@ declare module 'express-session' {
 export class App {
 	public express: express.Express;
 	public store: Store;
+	public auth: Auth;
 	private httpsServer: https.Server;
 	private httpServer: http.Server;
 
-	constructor(store: Store) {
+	constructor(store: Store, auth: Auth) {
 		this.store = store;
+		this.auth = auth;
+		this.auth.setApp(this);
 		this.express = express();
 		this.httpsServer = https.createServer(
 			{
@@ -55,7 +59,9 @@ export class App {
 			import("../routes/index"),
 			import("../routes/beans"),
 			import("../routes/things"),
-			import("../routes/relationships")
+			import("../routes/relationships"),
+			import("../routes/users/create"),
+			import("../routes/users/list"),
 		]);
 		for (const route of routes) {
 			route.default(this);

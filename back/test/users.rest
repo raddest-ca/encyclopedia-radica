@@ -1,0 +1,40 @@
+POST https://localhost/users/create
+Content-Type: application/json
+
+{
+    "slug": "beans",
+    "password": "howdy"
+}
+
+###
+
+GET https://localhost/users/list
+Content-Type: application/json
+
+###
+
+POST https://localhost/rels
+Content-Type: application/json
+
+{
+	"filter": {
+		"left": {
+			"type": "user"
+		},
+        "type": "password"
+	}
+}
+
+###
+
+POST https://localhost/rels
+Content-Type: application/json
+
+{
+	"filter": {
+		"left": {
+			"type": "password"
+		},
+        "type": "hash"
+	}
+}

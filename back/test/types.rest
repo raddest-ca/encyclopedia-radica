@@ -1,0 +1,8 @@
+POST https://localhost/things
+Content-Type: application/json
+
+{
+	"filter": {
+        "type": "type"
+	}
+}

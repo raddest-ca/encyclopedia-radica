@@ -12,7 +12,7 @@ export interface Relationship<L extends KnownType, T extends KnownType, R extend
 	right: Thing<R>;
 }
 
-export type Either = Thing<any> | Relationship<any,any,any>;
+export type Either = Thing<KnownType> | Relationship<KnownType,KnownType,KnownType>;
 export type EitherConsumer = (x: Either) => void;
 
 export function isThing(obj: any): obj is Thing<any> {
