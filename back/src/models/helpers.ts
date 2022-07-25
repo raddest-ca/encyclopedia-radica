@@ -1,5 +1,5 @@
-import { Either, Relationship, Thing, Type } from "./core";
-import { knownTypes } from "./known-types";
+import { Either, Relationship, Thing } from "./core";
+import { KnownType } from "./known-types";
 import { v4 as uuid } from "uuid";
 import { toIsoString } from "../jshelpers";
 
@@ -8,25 +8,25 @@ type HelperResult = {
 	all: Either[];
 };
 
-export function thing(type: Type, id: string | null = null): Thing {
+export function thing(type: KnownType, id: string | null = null): Thing<KnownType> {
 	return {
 		type,
 		id: id === null ? uuid() : id,
 	};
 }
 
-export function string(value: string): Thing {
-	return thing(knownTypes.string, value);
+export function string(value: string): Thing<KnownType> {
+	return thing("string", value);
 }
 
-export function rel(left: Thing, type: Type, right: Thing): Relationship {
+export function rel(left: Thing<KnownType>, type: KnownType, right: Thing<KnownType>): Relationship<any,any,any> {
 	return { type, left, right };
 }
 
-export function meta(it: Thing, date: Date | null = null) {
-	const _meta = thing(knownTypes.metadata);
-	const _rel = rel(it, knownTypes.metadata, _meta);
-	const dat = thing(knownTypes.date, toIsoString(date??new Date()));
+export function meta(it: Thing<KnownType>, date: Date | null = null) {
+	const _meta = thing("metadata");
+	const _rel = rel(it, "metadata", _meta);
+	const dat = thing("date", toIsoString(date??new Date()));
 	const rtn = {
         ref: {
             meta: _meta,
@@ -38,10 +38,10 @@ export function meta(it: Thing, date: Date | null = null) {
     return rtn as HelperResult & typeof rtn;
 }
 
-export function translate(language: Thing, value: string) {
-	const trans = thing(knownTypes.translation);
+export function translate(language: Thing<KnownType>, value: string) {
+	const trans = thing("translation");
 	const str = string(value);
-	const _rel = rel(trans, knownTypes.language, language);
+	const _rel = rel(trans, "language", language);
 
 	const rtn = {
 		ref: {
@@ -54,9 +54,9 @@ export function translate(language: Thing, value: string) {
     return rtn as HelperResult & typeof rtn;
 }
 
-export function name(it: Thing, language: Thing, nickname: string) {
+export function name(it: Thing<KnownType>, language: Thing<KnownType>, nickname: string) {
 	const _trans = translate(language, nickname);
-	const _rel = rel(it, knownTypes.name, _trans.ref.trans as Thing);
+	const _rel = rel(it, "name", _trans.ref.trans);
 	const rtn = {
         ref: {
             trans: _trans,
@@ -67,9 +67,9 @@ export function name(it: Thing, language: Thing, nickname: string) {
     return rtn as HelperResult & typeof rtn;
 }
 
-export function transcribe(it: Thing, language: Thing, value: string) {
+export function transcribe(it: Thing<KnownType>, language: Thing<KnownType>, value: string) {
     const translation = translate(language, value);
-    const _rel = rel(it, knownTypes.transcript, translation.ref.trans);
+    const _rel = rel(it, "transcript", translation.ref.trans);
     const rtn = {
         ref: {
             trans: translation,
@@ -80,9 +80,9 @@ export function transcribe(it: Thing, language: Thing, value: string) {
     return rtn as HelperResult & typeof rtn;
 }
 
-export function link(it: Thing, uri: string) {
+export function link(it: Thing<KnownType>, uri: string) {
 	const str = string(uri);
-	const _rel = rel(it, knownTypes.uri, str);
+	const _rel = rel(it, "uri", str);
 	
     const rtn = {
         ref: {

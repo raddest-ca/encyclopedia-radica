@@ -1,4 +1,4 @@
-import { knownTypes } from "../models/known-types";
+import { KnownType, knownTypes } from "../models/known-types";
 import type { Either, Thing } from "../models/core";
 import type { Store } from "./store";
 import { thing, rel, meta, name, transcribe, link } from "../models/helpers";
@@ -9,22 +9,22 @@ export function addData(store: Store) {
 		return items;
 	}
 
-	const types: Record<string, Thing> = {};
+	const types: Record<string, Thing<KnownType>> = {};
 	for (const type of Object.values(knownTypes)) {
-		const t = thing(knownTypes.type, type.id);
+		const t = thing("type", type);
 		add(t);
-		types[type.id] = t;
+		types[type] = t;
 	}
 
-	const en = thing(knownTypes.language, "en-CA");
+	const en = thing("language", "en-CA");
 	add(en);
 	add(...name(en, en, "English").all);
 
-	const meme = thing(knownTypes.tag, "meme");
+	const meme = thing("tag", "meme");
 	add(meme);
 
 	{		
-		const video = thing(knownTypes.video);
+		const video = thing("video");
 		add(video);
 		add(...meta(video, new Date("2021-05-22T14:59-04:00")).all)
 		add(...name(video, en, "Scooby schwee").all);
@@ -35,22 +35,22 @@ export function addData(store: Store) {
 		);
 		add(..._link.all);
 
-		add(rel(video, knownTypes.tag, meme));
+		add(rel(video, "tag", meme));
 
-		const lain = thing(knownTypes.character);
+		const lain = thing("character");
 		add(lain);
 		add(...name(lain, en, "Lain").all);
-		add(rel(video, knownTypes.character, lain));
+		add(rel(video, "character", lain));
 
-		const scooby = thing(knownTypes.character);
+		const scooby = thing("character");
 		add(scooby);
 		add(...name(scooby, en, "Scooby Doo").all);
-		add(rel(video, knownTypes.character, scooby));
+		add(rel(video, "character", scooby));
 
-		const shaggy = thing(knownTypes.character);
+		const shaggy = thing("character");
 		add(shaggy);
 		add(...name(shaggy, en, "Shaggy").all);
-		add(rel(video, knownTypes.character, shaggy));
+		add(rel(video, "character", shaggy));
 
 		let content = `(speaking Japanese)
 Lain: "What's wrong?"
@@ -62,14 +62,14 @@ Shaggy hops into the car, and it drives off the right of the frame.
 Cuts to Lain looking slightly surprised.`;
 		add(...transcribe(video, en, content).all);
 
-		let style = thing(knownTypes.style);
+		let style = thing("style");
 		add(style);
 		add(...name(style, en, "Cel Animation").all);
-		add(rel(video, knownTypes.style, style));
+		add(rel(video, "style", style));
 
-		style = thing(knownTypes.style);
+		style = thing("style");
 		add(style);
 		add(...name(style, en, "Anime").all);
-		add(rel(video, knownTypes.style, style));
+		add(rel(video, "style", style));
 	}
 }

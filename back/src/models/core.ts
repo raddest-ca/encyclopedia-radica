@@ -1,31 +1,27 @@
-export interface Type {
+import { KnownType } from "./known-types";
+
+export interface Thing<T extends KnownType> {
+	type: T;
 	id: string;
-	version: string;
-}
-export function isType(obj: any): obj is Type {
-	return obj.id !== undefined && obj.version !== undefined;
 }
 
-export interface Thing {
-	type: Type;
-	id: string;
+
+export interface Relationship<L extends KnownType, T extends KnownType, R extends KnownType> {
+	type: T;
+	left: Thing<L>;
+	right: Thing<R>;
 }
-export function isThing(obj: any): obj is Thing {
+
+export type Either = Thing<any> | Relationship<any,any,any>;
+export type EitherConsumer = (x: Either) => void;
+
+export function isThing(obj: any): obj is Thing<any> {
 	return obj.type !== undefined && obj.id !== undefined;
 }
-
-export interface Relationship {
-	type: Type;
-	left: Thing;
-	right: Thing;
-}
-export function isRelationship(obj: any): obj is Relationship {
+export function isRelationship(obj: any): obj is Relationship<any,any,any> {
 	return (
 		obj.type !== undefined &&
 		obj.left !== undefined &&
 		obj.right !== undefined
 	);
 }
-
-export type Either = Thing | Relationship;
-export type EitherConsumer = (x: Either) => void;
