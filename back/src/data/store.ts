@@ -25,6 +25,13 @@ export interface RelationshipQuery<L extends KnownType, T extends KnownType, R e
 	countOnly?: boolean;
 }
 
+export interface CollectionResult<T> {
+	values: T[];
+	count: number;
+	countOnly: boolean;
+	success: boolean;
+}
+
 export class Store {
 	private things: Array<Thing<KnownType>> = [];
 	private relationships: Array<Relationship<KnownType, KnownType, KnownType>> = [];
@@ -45,7 +52,7 @@ export class Store {
 		return await Promise.all(items.map(x => this.add(x)));
 	}
 
-	public async getThings<T extends KnownType>(query: ThingQuery<T>) {
+	public async getThings<T extends KnownType>(query: ThingQuery<T>): Promise<CollectionResult<Thing<T>>> {
 		// console.dir(query);
 		let pred: (t: Thing<KnownType>) => boolean = _ => true;
 		if (query.filter.type !== undefined) {
@@ -61,12 +68,13 @@ export class Store {
 			values: query.countOnly ? [] : rtn,
 			count: rtn.length,
 			countOnly: query.countOnly ?? false,
+			success: true,
 		};
 	}
 
 	public async getRelationships<L extends KnownType, T extends KnownType, R extends KnownType>(
 		query: RelationshipQuery<L, T, R>,
-	) {
+	): Promise<CollectionResult<Relationship<L, T, R>>> {
 		// console.dir(query);
 		let pred: (x: Relationship<KnownType, KnownType, KnownType>) => boolean = _ => true;
 		if (query.filter.type !== undefined) {
@@ -94,6 +102,7 @@ export class Store {
 			values: query.countOnly ? [] : rtn,
 			count: rtn.length,
 			countOnly: query.countOnly ?? false,
+			success: true,
 		};
 	}
 }

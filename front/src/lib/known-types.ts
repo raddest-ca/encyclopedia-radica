@@ -1,29 +1,31 @@
-const version = "1.0.0";
-
 export const knownTypes = {
-	string: { id: "string", version },
-	number: { id: "number", version },
-	type: { id: "type", version },
-	identifier: { id: "id", version },
-	metadata: { id: "metadata", version },
-	hash: { id: "hash", version },
-	translation: {id: "translation", version},
+	string: "string",
+	number: "number",
+	type: "type",
 
-	date: { id: "date", version },
-	datetime: { id: "datetime", version },
+	metadata: "metadata",
 
-	video: { id: "video", version },
-	uri: { id: "uri", version },
+	hash: "hash",
+	algorithm: "algorithm",
+	password: "password",
+	salt: "salt",
+	slug: "slug",
+	user: "user",
 
-	transcript: { id: "transcript", version },
+	date: "date",
+	date_created: "date created",
+	datetime: "datetime",
 
-	character: { id: "character", version },
-	name: { id: "name", version },
-	language: { id: "language", version },
+	translation: "translation",
+	video: "video",
+	uri: "uri",
+	transcript: "transcript",
+	character: "character",
+	name: "name",
+	language: "language",
+	style: "style",
+	tag: "tag",
+} as const;
 
-	style: { id: "style", version },
-	tag: { id: "tag", version },
-
-};
-
-// export type KnownType = typeof knownTypes[keyof typeof knownTypes];
+export type KnownTypes = typeof knownTypes;
+export type KnownType = KnownTypes[keyof KnownTypes];

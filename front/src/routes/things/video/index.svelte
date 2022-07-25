@@ -4,11 +4,10 @@
 	export async function load({ fetch, params }: LoadEvent): Promise<LoadOutput> {
 		const things = await getThings(fetch, {
 			filter: {
-				type: {
-					id: knownTypes.video.id,
-				},
+				type: knownTypes.video,
 			},
 		});
+		console.log(things);
 		const uris = await getCollatedRelationships(
 			fetch,
 			things.values!.map((thing) => ({
@@ -17,7 +16,7 @@
 						id: thing.id,
 						type: thing.type,
 					},
-					nature: knownTypes.uri,
+					type: knownTypes.uri,
 					right: {
 						type: knownTypes.string,
 					},
@@ -43,7 +42,7 @@
 		type ThingResults,
 	} from "$lib/requesting";
 	import { _ } from "svelte-i18n";
-	import { knownTypes } from "$lib/known-types";
+	import { knownTypes, type KnownType } from "$lib/known-types";
 	import type { Thing } from "$lib/core";
 	import { mapRelationship } from "$lib/data-helper";
 
@@ -56,7 +55,7 @@
 		return uri.substr(uri.lastIndexOf(".") + 1);
 	}
 
-	function getHref(thing: Thing) {
+	function getHref<T extends KnownType>(thing: Thing<T>) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
 		const rtn = `./video/${encodeURIComponent(thing.id)}/`;
 		return rtn;
@@ -91,7 +90,7 @@
 </main>
 
 <style>
-	th {
+	/* th {
 		@apply bg-primary text-primary-content;
 	}
 	td,
@@ -103,5 +102,5 @@
 	#typeid,
 	#typeversion {
 		@apply bg-primary-focus;
-	}
+	} */
 </style>

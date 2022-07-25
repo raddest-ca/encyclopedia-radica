@@ -1,8 +1,3 @@
-export const a = {
-	z: 4,
-	t: "asd",
-};
-
 export const knownTypes = {
 	string: "string",
 	number: "number",

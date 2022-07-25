@@ -36,10 +36,11 @@ export class App {
 			},
 			this.express,
 		);
-		this.httpServer = http.createServer(function (req, res) {
-			res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
-			res.end();
-		});
+		this.httpServer = http.createServer(this.express);
+		// this.httpServer = http.createServer(function (req, res) {
+		// 	res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
+		// 	res.end();
+		// });
 	}
 
 	async setup() {

@@ -1,22 +1,27 @@
-export type Atom = string;
+import { KnownType } from "./known-types";
 
-export interface Type {
-	id: Atom;
-	version: Atom;
+export interface Thing<T extends KnownType> {
+	type: T;
+	id: string;
 }
 
-export interface Thing {
-	type: Type;
-	id: Atom;
+
+export interface Relationship<L extends KnownType, T extends KnownType, R extends KnownType> {
+	type: T;
+	left: Thing<L>;
+	right: Thing<R>;
 }
 
-export interface Relationship {
-	version: Atom;
-	type: Type;
-	left: Thing;
-	right: Thing;
-}
-
-export type Either = Thing | Relationship;
+export type Either = Thing<KnownType> | Relationship<KnownType,KnownType,KnownType>;
 export type EitherConsumer = (x: Either) => void;
 
+export function isThing(obj: any): obj is Thing<any> {
+	return obj.type !== undefined && obj.id !== undefined;
+}
+export function isRelationship(obj: any): obj is Relationship<any,any,any> {
+	return (
+		obj.type !== undefined &&
+		obj.left !== undefined &&
+		obj.right !== undefined
+	);
+}
