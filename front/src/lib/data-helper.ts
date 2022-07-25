@@ -2,7 +2,7 @@ import type { Either, Relationship, Thing } from "./core";
 
 export function toMap<T,Y>(list: T[], propGetter: (v:T) => string, valueGetter: (v:T) => Y) {
     return list.reduce((map, v) => {
-        map.set(propGetter(v), v);
+        map.set(propGetter(v), valueGetter(v));
         return map;
     }, new Map<string, Y>());
 }
