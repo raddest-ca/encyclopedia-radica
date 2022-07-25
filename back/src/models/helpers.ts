@@ -26,14 +26,16 @@ export function rel(left: Thing<KnownType>, type: KnownType, right: Thing<KnownT
 export function meta(it: Thing<KnownType>, date: Date | null = null) {
 	const _meta = thing("metadata");
 	const _rel = rel(it, "metadata", _meta);
-	const dat = thing("date", toIsoString(date??new Date()));
+	const dat = thing("datetime", toIsoString(date??new Date()));
+	const dateRel = rel(_meta, "date created", dat);
 	const rtn = {
         ref: {
             meta: _meta,
             rel: _rel,
             date: dat,
+            dateRel,
         },
-        all: [_meta, _rel],
+        all: [_meta, _rel, dat, dateRel],
     } 
     return rtn as HelperResult & typeof rtn;
 }

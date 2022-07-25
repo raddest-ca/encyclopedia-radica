@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 import { App } from "../app";
-import { rel, thing } from "../models/helpers";
+import { meta, rel, thing } from "../models/helpers";
 
 export class Auth {
 	public app: App;
@@ -75,6 +75,7 @@ export class Auth {
 			rel(passwordThing, "algorithm", algoThing),
 			slugThing,
 			rel(userThing, "slug", slugThing),
+			...meta(userThing).all
 		);
 		return userThing.id;
 	}

@@ -17,9 +17,11 @@ export const knownTypes = {
 	slug: "slug",
 	user: "user",
 
-	translation: "translation",
 	date: "date",
+	date_created: "date created",
 	datetime: "datetime",
+
+	translation: "translation",
 	video: "video",
 	uri: "uri",
 	transcript: "transcript",
