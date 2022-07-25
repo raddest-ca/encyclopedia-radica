@@ -44,7 +44,7 @@ export class Store {
 		}
 		if (query.filter.id !== undefined) {
 		}
-		const rtn = this.things.filter(pred);
+		const rtn = this.things.filter(pred) as Thing<T>[];
 		return {
 			values: query.countOnly ? [] : rtn,
 			count: rtn.length,
@@ -77,7 +77,7 @@ export class Store {
 			const old = pred;
 			pred = x => old(x) && x.right.type === query.filter.right?.type;
 		}
-		const rtn = this.relationships.filter(pred);
+		const rtn = this.relationships.filter(pred) as Relationship<L,T,R>[];
 		return {
 			values: query.countOnly ? [] : rtn,
 			count: rtn.length,
