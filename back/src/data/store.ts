@@ -43,6 +43,8 @@ export class Store {
 			pred = x => old(x) && x.type === query.filter.type;
 		}
 		if (query.filter.id !== undefined) {
+			const old = pred;
+			pred = x => old(x) && x.id === query.filter.id;
 		}
 		const rtn = this.things.filter(pred) as Thing<T>[];
 		return {
