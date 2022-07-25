@@ -1,13 +1,12 @@
-import { BaseClient, generators, Issuer } from "openid-client";
-import type { Express } from "express";
 import { config } from "../config";
+import { BaseClient, generators, Issuer } from "openid-client";
 import type { Session, SessionData } from "express-session";
+import { App } from "../app";
+
 let issuer: Issuer<BaseClient>;
 let client: BaseClient;
 
-
-
-export async function setup(app: Express) {
+export async function setup(app: App) {
     issuer = await Issuer.discover(`https://login.microsoftonline.com/${config.tenant_id}/v2.0`);
     // console.log("discovered", issuer.issuer, issuer.metadata);
 
@@ -17,8 +16,7 @@ export async function setup(app: Express) {
         response_types:["id_token"],
     });
 
-    
-    app.post("/cb", async (req, res) => {
+    app.express.post("/cb", async (req, res) => {
         try {
             if (req.session.nonce === undefined) return;
             const params = client.callbackParams(req);
@@ -45,7 +43,4 @@ export function getLoginUrl(session: Session & Partial<SessionData>) {
         response_mode: "form_post",
         nonce,
     })
-}
-
-export async function main() {
 }
