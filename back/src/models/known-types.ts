@@ -13,6 +13,7 @@ export const knownTypes = {
 	hash: "hash",
 	algorithm: "algorithm",
 	password: "password",
+	salt: "salt",
 	slug: "slug",
 	user: "user",
 

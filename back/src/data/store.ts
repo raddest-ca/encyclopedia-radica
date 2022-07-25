@@ -46,7 +46,7 @@ export class Store {
 	}
 
 	public async getThings<T extends KnownType>(query: ThingQuery<T>) {
-		console.dir(query);
+		// console.dir(query);
 		let pred: (t: Thing<KnownType>) => boolean = _ => true;
 		if (query.filter.type !== undefined) {
 			const old = pred;
@@ -67,7 +67,7 @@ export class Store {
 	public async getRelationships<L extends KnownType, T extends KnownType, R extends KnownType>(
 		query: RelationshipQuery<L, T, R>,
 	) {
-		console.dir(query);
+		// console.dir(query);
 		let pred: (x: Relationship<KnownType, KnownType, KnownType>) => boolean = _ => true;
 		if (query.filter.type !== undefined) {
 			const old = pred;
