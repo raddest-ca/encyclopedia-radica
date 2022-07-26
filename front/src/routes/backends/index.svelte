@@ -54,13 +54,11 @@
 	let success = false;
 	let successHandle: NodeJS.Timeout | undefined;
 
-	let visibleForms: Map<Backend, boolean> = new Map();
-	function toggleVisibility(backend: Backend) {
-		visibleForms.set(backend, !(visibleForms.get(backend) ?? false));
-		visibleForms = visibleForms;
+	let editingForms: Map<Backend, boolean> = new Map();
+	function toggleEditing(backend: Backend) {
+		editingForms.set(backend, !(editingForms.get(backend) ?? false));
+		editingForms = editingForms;
 	}
-	let editBackendName: Map<Backend, string> = new Map();
-	let editBackendToken: Map<Backend, string> = new Map();
 
 	function fixBackends() {
 		backends.update((list) =>
@@ -92,83 +90,183 @@
 	{:else}
 		<div class="flex flex-wrap justify-around">
 			{#each $backends as backend, i}
-				{@const formVisible = !visibleForms.get(backend) === true}
+				{@const editing = editingForms.get(backend) === true}
 
 				<div
 					class="rounded bg-neutral p-1 px-2 m-1 flex-auto max-w-lg shadow-xl border-primary border-2"
 				>
-					<!-- Name -->
-					<span class="text-lg text-neutral-content mr-5">{backend.name}</span>
-
-					<!-- Trash icon -->
-					<svg
-						on:click={(e) => deleteBackend(backend)}
-						xmlns="http://www.w3.org/2000/svg"
-						class="ml-4 mt-1.5 h-4 w-4 float-right hover:cursor-pointer"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-						stroke-width="2"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-						/>
-					</svg>
-
-					<!-- Active checkbox -->
-					<div class="form-control">
-						<label class="label cursor-pointer">
-							<span class="label-text"> {$_("route.backends.index.active")}</span>
-							<input
-								type="checkbox"
-								bind:checked={backend.active}
-								class="checkbox checkbox-primary"
+					{#if editing}
+						<!-- Edit icon -->
+						<svg
+							on:click={() => toggleEditing(backend)}
+							xmlns="http://www.w3.org/2000/svg"
+							class="ml-4 mt-1.5 h-4 w-4 float-right hover:cursor-pointer"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							class:text-primary={editing}
+							stroke-width="2"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
 							/>
-						</label>
-					</div>
-
-					<!-- URI -->
-					<div><a class="link link-primary mr-5" href={backend.uri}>{backend.uri}</a></div>
-
-					<!-- Auth forms -->
-					<label class="label cursor-pointer">
-						<span class="label-text"> {$_("route.backends.index.use_auth")}</span>
-						<input
-							type="checkbox"
-							bind:checked={backend.useAuth}
-							on:change={fixBackends}
-							class="checkbox checkbox-primary"
-						/>
-					</label>
-
-					{#if backend.useAuth && backend.auth !== undefined}
-						<form class:hidden={!formVisible} class="mb-1">
-							<label for="add-form-{i}" class="label">
-								<span class="label-text">{$_("route.backends.index.form-add-auth.userid")}</span>
-								<span class="label-text-alt text-red-500">{$_("required")}</span>
-							</label>
-							<input
-								id="add-form-{i}-name"
-								type="text"
-								bind:value={backend.auth.userId}
-								placeholder={$_("route.backends.index.form-add-auth.userid.placeholder")}
-								class="input input-bordered w-full max-w-xs placeholder-slate-600"
+						</svg>
+						<!-- Delete icon -->
+						<svg
+							on:click={() => deleteBackend(backend)}
+							xmlns="http://www.w3.org/2000/svg"
+							class="ml-4 mt-1.5 h-4 w-4 float-right hover:cursor-pointer"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
 							/>
-							<label for="add-form-{i}" class="label">
-								<span class="label-text">{$_("route.backends.index.form-add-auth.token")}</span>
-								<span class="label-text-alt text-red-500">{$_("required")}</span>
-							</label>
-							<input
-								id="add-form-{i}-name"
-								type="text"
-								bind:value={backend.auth.token}
-								placeholder={$_("route.backends.index.form-add-auth.token.placeholder")}
-								class="input input-bordered w-full max-w-xs placeholder-slate-600"
-							/>
-						</form>
+						</svg>
 					{/if}
+
+					<form id="edit-form-{i}">
+						<!-- Name -->
+						{#if editing}
+							<div class="form-control">
+								<label for="edit-form-{i}-name" class="label">
+									<span class="label-text">{$_("route.backends.index.form.name")}</span>
+									<span class="label-text-alt text-red-500">{$_("required")}</span>
+								</label>
+								<input
+									id="edit-form-{i}-name"
+									type="text"
+									bind:value={backend.name}
+									placeholder={$_("route.backends.index.form.name.placeholder")}
+									class="input input-bordered w-full max-w-xs placeholder-slate-600"
+								/>
+							</div>
+						{:else}
+							<span class="text-lg text-neutral-content mr-5">{backend.name}</span>
+						{/if}
+
+						{#if !editing}
+							<!-- Edit icon -->
+							<svg
+								on:click={() => toggleEditing(backend)}
+								xmlns="http://www.w3.org/2000/svg"
+								class="ml-4 mt-1.5 h-4 w-4 float-right hover:cursor-pointer"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								class:text-primary={editing}
+								stroke-width="2"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+								/>
+							</svg>
+						{/if}
+
+						<!-- Active checkbox -->
+						<div class="form-control">
+							<label class="label cursor-pointer my-4">
+								<span class="label-text"> {$_("route.backends.index.active")}</span>
+								<input
+									disabled={!editing}
+									type="checkbox"
+									bind:checked={backend.active}
+									class="checkbox checkbox-primary"
+								/>
+							</label>
+						</div>
+
+						<!-- URI -->
+						{#if editing}
+							<div class="form-control">
+								<label for="edit-form-{i}-uri" class="label">
+									<span class="label-text">{$_("route.backends.index.form.uri")}</span>
+									<span class="label-text-alt text-red-500">{$_("required")}</span>
+								</label>
+								<input
+									id="edit-form-{i}-uri"
+									type="text"
+									bind:value={backend.uri}
+									placeholder={$_("route.backends.index.form.uri.placeholder")}
+									class="input input-bordered w-full max-w-xs placeholder-slate-600"
+								/>
+							</div>
+						{:else}
+							<div><a class="link link-primary mr-5" href={backend.uri}>{backend.uri}</a></div>
+						{/if}
+						<!-- Use auth checkbox -->
+						<div class="form-control">
+							<label class="label cursor-pointer">
+								<span class="label-text"> {$_("route.backends.index.use_auth")}</span>
+								<input
+									disabled={!editing}
+									type="checkbox"
+									bind:checked={backend.useAuth}
+									on:change={fixBackends}
+									class="checkbox checkbox-primary"
+								/>
+							</label>
+						</div>
+
+						<!-- Auth form -->
+						{#if editing}
+							{#if backend.useAuth && backend.auth !== undefined}
+								<form class="mb-1">
+									<div class="form-control">
+										<label for="edit-form-{i}" class="label">
+											<span class="label-text"
+												>{$_("route.backends.index.edit-form.auth.userid")}</span
+											>
+											<span class="label-text-alt text-red-500">{$_("required")}</span>
+										</label>
+										<input
+											id="edit-form-{i}-name"
+											type="text"
+											bind:value={backend.auth.userId}
+											placeholder={$_("route.backends.index.edit-form.auth.userid.placeholder")}
+											class="input input-bordered w-full max-w-xs placeholder-slate-600"
+										/>
+									</div>
+									<div class="form-control">
+										<label for="edit-form-{i}" class="label">
+											<span class="label-text"
+												>{$_("route.backends.index.edit-form.auth.token")}</span
+											>
+											<span class="label-text-alt text-red-500">{$_("required")}</span>
+										</label>
+										<input
+											id="edit-form-{i}-name"
+											type="text"
+											bind:value={backend.auth.token}
+											placeholder={$_("route.backends.index.edit-form.auth.token.placeholder")}
+											class="input input-bordered w-full max-w-xs placeholder-slate-600"
+										/>
+									</div>
+								</form>
+							{/if}
+						{:else}
+							<div class="text-neutral-content">
+								<p>
+									{$_("route.backends.index.auth.user_id", {
+										values: { value: backend.auth?.userId },
+									})}
+								</p>
+								<p>
+									{$_("route.backends.index.auth.token", {
+										values: { value: backend.auth?.token },
+									})}
+								</p>
+							</div>
+						{/if}
+					</form>
 				</div>
 			{/each}
 		</div>
