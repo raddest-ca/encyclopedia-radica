@@ -251,6 +251,9 @@
 										/>
 									</div>
 								</form>
+								<a href="/things/users/create" class="link-primary"
+									>{$_("route.backends.index.edit-form.new_account")}</a
+								>
 							{/if}
 						{:else}
 							<div class="text-neutral-content">

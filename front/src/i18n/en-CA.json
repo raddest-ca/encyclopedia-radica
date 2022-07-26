@@ -33,6 +33,7 @@
     "route.backends.index.edit-form.auth.userid.placeholder": "00000-0000-0000-00000",
     "route.backends.index.edit-form.auth.token": "Token",
     "route.backends.index.edit-form.auth.token.placeholder": "fdsjaklfhdsjkalfhdsaiue",
+    "route.backends.index.edit-form.new_account": "I'm a new user.",
     "route.things.type.index.discovered": "Discovered {count} types.",
     "route.index.header": "Howdy.",
     "route.index.body": "My potions are too strong for you, traveller.",
