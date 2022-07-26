@@ -66,7 +66,7 @@
 
 <main
 	class="place-content-center flex flex-wrap drop-shadow-2xl m-auto mt-10 rounded-xl p-4 bg-base-200"
-	style="width: 600px;"
+	style="max-width: 600px;"
 >
 	<p>
 		{$_("route.things.type.index.discovered", {

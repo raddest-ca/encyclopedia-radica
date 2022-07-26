@@ -9,6 +9,7 @@
     "version": "Version",
     "name": "Name",
     "count": "Count",
+    "submit": "submit",
     "required": "Required",
     "warning.required": "{name} is required.",
     "action.browser.back": "Back",
@@ -40,5 +41,10 @@
     "route.index.getstarted": "I want only your strongest potions",
     "route.things.index.card.types.header":"Types",
     "route.things.index.card.videos.header":"Videos",
-    "route.things.video.index.discovered": "Discovered {count} videos."
+    "route.things.video.index.discovered": "Discovered {count} videos.",
+    "route.things.users.create.slug": "Slug",
+    "route.things.users.create.slug.placeholder": "xXxB34NL0RDxXx",
+    "route.things.users.create.password": "Password",
+    "route.things.users.create.password.placeholder": "idk lol",
+    "route.things.users.create.header": "Create a User"
 }
