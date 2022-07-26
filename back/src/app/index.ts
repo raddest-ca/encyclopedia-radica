@@ -9,6 +9,7 @@ import { config } from "../config";
 import passport from "passport";
 import helmet from "helmet";
 import { Auth } from "../auth";
+import cors from "cors";
 
 declare module 'express-session' {
     interface SessionData {
@@ -46,7 +47,10 @@ export class App {
 	async setup() {
 		this.express.use(express.json());
 		this.express.use(express.urlencoded({ extended: true }));
-		this.express.use(helmet());
+		this.express.use(cors());
+		this.express.use(helmet({
+			crossOriginEmbedderPolicy: false
+		}));
 		// this.express.use(passport.initialize());
 		// this.express.use(passport.session());
 		this.express.use(morgan("combined"));
