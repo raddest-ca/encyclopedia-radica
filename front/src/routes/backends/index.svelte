@@ -2,6 +2,7 @@
 	import { _ } from "svelte-i18n";
 	import { backends, type Backend } from "$lib/backends";
 	import { fly } from "svelte/transition";
+	import { backend } from "$lib/requesting";
 
 	function validate(submitting: boolean) {
 		const old = errors;
@@ -21,6 +22,7 @@
 
 		return (valid = errors.length === 0);
 	}
+	let valid = false;
 
 	function addBlank() {
 		name = name.trim();
@@ -32,6 +34,7 @@
 				active: false,
 				uri,
 				comment: "",
+				useAuth: false,
 			});
 			return x;
 		});
@@ -48,9 +51,33 @@
 
 	let errors: string[] = [];
 
-	let valid = false;
 	let success = false;
 	let successHandle: NodeJS.Timeout | undefined;
+
+	let visibleForms: Map<Backend, boolean> = new Map();
+	function toggleVisibility(backend: Backend) {
+		visibleForms.set(backend, !(visibleForms.get(backend) ?? false));
+		visibleForms = visibleForms;
+	}
+	let editBackendName: Map<Backend, string> = new Map();
+	let editBackendToken: Map<Backend, string> = new Map();
+
+	function fixBackends() {
+		backends.update((list) =>
+			list.map((b) => {
+				if (b.useAuth && b.auth === undefined) {
+					b.auth = {
+						userId: "",
+						token: "",
+					};
+				} else if (!b.useAuth && b.auth?.userId == "" && b.auth?.token == "") {
+					delete b.auth;
+				}
+				return b;
+			}),
+		);
+		console.log("updating", $backends[0].auth);
+	}
 
 	let name = "";
 	let uri = "";
@@ -64,7 +91,9 @@
 		<p>{$_("route.backends.index.none")}</p>
 	{:else}
 		<div class="flex flex-wrap justify-around">
-			{#each $backends as backend}
+			{#each $backends as backend, i}
+				{@const formVisible = !visibleForms.get(backend) === true}
+
 				<div
 					class="rounded bg-neutral p-1 px-2 m-1 flex-auto max-w-lg shadow-xl border-primary border-2"
 				>
@@ -101,7 +130,45 @@
 					</div>
 
 					<!-- URI -->
-					<span><a class="link link-primary mr-5" href={backend.uri}>{backend.uri}</a></span>
+					<div><a class="link link-primary mr-5" href={backend.uri}>{backend.uri}</a></div>
+
+					<!-- Auth forms -->
+					<label class="label cursor-pointer">
+						<span class="label-text"> {$_("route.backends.index.use_auth")}</span>
+						<input
+							type="checkbox"
+							bind:checked={backend.useAuth}
+							on:change={fixBackends}
+							class="checkbox checkbox-primary"
+						/>
+					</label>
+
+					{#if backend.useAuth && backend.auth !== undefined}
+						<form class:hidden={!formVisible} class="mb-1">
+							<label for="add-form-{i}" class="label">
+								<span class="label-text">{$_("route.backends.index.form-add-auth.userid")}</span>
+								<span class="label-text-alt text-red-500">{$_("required")}</span>
+							</label>
+							<input
+								id="add-form-{i}-name"
+								type="text"
+								bind:value={backend.auth.userId}
+								placeholder={$_("route.backends.index.form-add-auth.userid.placeholder")}
+								class="input input-bordered w-full max-w-xs placeholder-slate-600"
+							/>
+							<label for="add-form-{i}" class="label">
+								<span class="label-text">{$_("route.backends.index.form-add-auth.token")}</span>
+								<span class="label-text-alt text-red-500">{$_("required")}</span>
+							</label>
+							<input
+								id="add-form-{i}-name"
+								type="text"
+								bind:value={backend.auth.token}
+								placeholder={$_("route.backends.index.form-add-auth.token.placeholder")}
+								class="input input-bordered w-full max-w-xs placeholder-slate-600"
+							/>
+						</form>
+					{/if}
 				</div>
 			{/each}
 		</div>
