@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { setup as setupI18n } from "../i18n/i18n";
+	import { setup as setupI18n } from "$lib/i18n";
 	import "../app.css";
-	import Navigation from "../components/Navigation.svelte";
+	import Navigation from "$lib/components/Navigation.svelte";
 	setupI18n();
 </script>
 

@@ -11,7 +11,7 @@
 </script>
 
 <script lang="ts">
-	import CopyButton from "../../../components/CopyButton.svelte";
+	import CopyButton from "../../../lib/components/CopyButton.svelte";
 	import { _ } from "svelte-i18n";
 
 	export let id: string;

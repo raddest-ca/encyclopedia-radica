@@ -63,6 +63,17 @@ export class Auth {
 		const algoThing = thing("algorithm", "bcrypt");
 		const slugThing = thing("string", slug);
 
+		/*
+		user:
+			!id						# not allowed to be specified
+			slug: string
+			password:
+				!id					# not allowed to be specified
+				hash: string
+				salt: string
+				algorithm: string
+		*/
+
 		await this.app.store.addAll(
 			userThing,
 			passwordThing,

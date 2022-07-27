@@ -10,6 +10,7 @@ import passport from "passport";
 import helmet from "helmet";
 import { Auth } from "../auth";
 import cors from "cors";
+import { createLogger } from "bunyan";
 
 declare module 'express-session' {
     interface SessionData {
@@ -17,6 +18,8 @@ declare module 'express-session' {
 		authenticated: boolean;
     }
 }
+
+const logger = createLogger({ name: "app", level: config.log_level });
 
 export class App {
 	public express: express.Express;
@@ -45,6 +48,7 @@ export class App {
 	}
 
 	async setup() {
+		logger.info("setup begin");
 		this.express.use(express.json());
 		this.express.use(express.urlencoded({ extended: true }));
 		this.express.use(cors());
@@ -61,24 +65,28 @@ export class App {
 		}))
 		
 		const routes = await Promise.all([
-			import("../routes/index"),
-			import("../routes/beans"),
-			import("../routes/things"),
-			import("../routes/relationships"),
-			import("../routes/users/create"),
-			import("../routes/users/list"),
+			//todo: auto-discover or warnings
+			(await import("../routes/index")).default,
+			(await import("../routes/insert")).process,
+			(await import("../routes/beans")).default,
+			(await import("../routes/things/list")).default,
+			(await import("../routes/relationships")).default,
+			(await import("../routes/users/create")).default,
+			(await import("../routes/users/list")).default,
 		]);
 		for (const route of routes) {
-			route.default(this);
+			route(this);
 		}
+		logger.info("setup end");
 	}
 
 	async run(httpPort: number, httpsPort: number) {
+		logger.info("starting servers");
 		this.httpsServer.listen(httpsPort, () => {
-			console.log(`Listening on https://localhost:${httpPort}`);
+			logger.info(`Listening on https://localhost:${httpPort}`);
 		});
 		this.httpServer.listen(httpPort, () => {
-			console.log(`Listening on http://localhost:${httpsPort}`);
+			logger.info(`Listening on http://localhost:${httpsPort}`);
 		})
 	}
 }

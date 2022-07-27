@@ -1,5 +1,18 @@
 <script lang="ts">
+	import Spinner from "$lib/components/Spinner.svelte";
+	import { insert } from "$lib/requesting";
 	import { _ } from "svelte-i18n";
+
+	let submitEnabled = true;
+	function submit() {
+		submitEnabled = false;
+		insert(fetch, {
+			things: [{}],
+			relationships: [],
+		});
+	}
+
+	let error = "";
 </script>
 
 <main class="mx-auto bg-base-200 drop-shadow-2xl mt-10 rounded-xl p-4 max-w-xs">
@@ -30,8 +43,22 @@
 			/>
 		</div>
 
-		<div class="mt-2">
-			<button type="submit" class="btn btn-primary">{$_("submit")}</button>
+		<div class="mt-2 flex">
+			<button
+				on:click|preventDefault={submit}
+				disabled={!submitEnabled}
+				type="submit"
+				class="btn btn-primary">{$_("submit")}</button
+			>
+			{#if !submitEnabled}
+				<div class="m-auto">
+					<Spinner />
+				</div>
+			{/if}
 		</div>
+
+		{#if error}
+			<div class="text-red-400 mt-4">{error}</div>
+		{/if}
 	</form>
 </main>

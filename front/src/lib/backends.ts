@@ -1,7 +1,7 @@
 import { derived } from "svelte/store";
 import { writableStorage } from "./data-helper";
 
-export interface BackendContext {
+export interface Backend {
 	name: string;
 	uri: string;
 	comment: string;
@@ -13,5 +13,5 @@ export interface BackendContext {
     }
 }
 
-export const backends = writableStorage("backend_contexts", [] as BackendContext[]);
+export const backends = writableStorage("backend_contexts", [] as Backend[]);
 export const activeBackends = derived(backends, ($backends) => $backends.filter((x) => x.active));

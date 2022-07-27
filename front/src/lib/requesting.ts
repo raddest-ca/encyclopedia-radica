@@ -40,10 +40,34 @@ export type FetchFunc = typeof fetch | LoadEvent["fetch"];
 
 export type ThingResults = Awaited<ReturnType<typeof getThings>>;
 
+export interface InsertPayload {
+	things: Thing<any>[];
+	relationships: Relationship<any, any, any>[];
+}
+
+export async function insert(fetch: FetchFunc, body: InsertPayload) {
+	console.log("Inserting with payload", body);
+	try {
+		const req = await fetch(`${backend}/insert`, {
+			headers: {
+				"Content-Type": "application/json",
+			},
+			method: "POST",
+			body: JSON.stringify(body),
+		});
+		return await req.json();
+	} catch (e) {
+		console.error("Inserting failed", e);
+		// todo: toast with error
+		// todo: standardize error responses from server
+		return null;
+	}
+}
+
 export async function getThings<T extends KnownType>(fetch: FetchFunc, body: ThingQuery<T>): Promise<CollectionResult<Thing<T>>> {
 	console.log("Requesting things with body", body);
 	try {
-		const req = await fetch(`${backend}/things`, {
+		const req = await fetch(`${backend}/things/list`, {
 			headers: {
 				"Content-Type": "application/json",
 			},
