@@ -84,29 +84,34 @@ export function process(body: InsertPayload): ApiResponse<Required<InsertPayload
 	};
 
 	let errors: ParameterizedMessage[] = [];
-	while (
-		processing?.queue?.relationships?.length !== 0 &&
-		processing?.queue?.things?.length !== 0
-	) {
+	logger.debug("policy iteration begin");
+	outer:
+	while (processing.queue.relationships.length > 0 || processing.queue.things.length > 0) {
 		if (++iter >= 100) throw new Error("Policy evaluation took too many iterations.");
+		logger.debug("policy iteration step begin");
 		for (const policy of policies) {
-			logger.debug("evaluating %s", policy.name);
+			logger.debug("policy evaluating: %s", policy.name);
 			const result = policy(processing);
-			console.log(result);
+			logger.debug(result, "policy result");
 			if (result.success) {
 				processing = result.value;
 			} else {
 				errors.push(...result.errors);
+				break outer;
 			}
 		}
 	}
+	logger.debug("policy iteration end");
 
 	if (errors.length === 0) {
-		logger.debug({
-			success: true,
-			relationship_count: processing.done.relationships.length,
-			thing_count: processing.done.things.length,
-		}, "processing end success");
+		logger.debug(
+			{
+				success: true,
+				relationship_count: processing.done.relationships.length,
+				thing_count: processing.done.things.length,
+			},
+			"processing end success",
+		);
 		return {
 			value: processing.done,
 			success: true,
