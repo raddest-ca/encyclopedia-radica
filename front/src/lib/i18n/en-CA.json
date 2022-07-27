@@ -36,6 +36,7 @@
     "route.backends.index.edit-form.auth.token.placeholder": "fdsjaklfhdsjkalfhdsaiue",
     "route.backends.index.edit-form.new_account": "I'm a new user.",
     "route.things.type.index.discovered": "Discovered {count} types.",
+    "route.things.type.[id].discovered": "Discovered {count} instances.",
     "route.index.header": "Howdy.",
     "route.index.body": "My potions are too strong for you, traveller.",
     "route.index.getstarted": "I want only your strongest potions",

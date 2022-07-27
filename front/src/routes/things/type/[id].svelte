@@ -4,9 +4,7 @@
 	export async function load({ fetch, params }: LoadEvent): Promise<LoadOutput> {
 		const things = await getThings(fetch, {
 			filter: {
-				type: {
-					id: decodeURIComponent(params.id),
-				},
+				type: decodeURIComponent(params.id) as KnownType,
 			},
 		});
 		return {
@@ -18,22 +16,26 @@
 </script>
 
 <script lang="ts">
-	import { getThings, type ThingResults } from "$lib/requesting";
+	import { getThings, type CollectionResult, type ThingResults } from "$lib/requesting";
 	import { _ } from "svelte-i18n";
 	import type { Thing } from "$lib/core";
+	import type { KnownType } from "$lib/known-types";
 
-	export let things: ThingResults;
+	export let things: CollectionResult<Thing<"date">>;
 
-	function getHref(thing: Thing) {
+	function getHref(thing: Thing<"date">) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
-		const rtn = `../${encodeURIComponent(thing.type.id)}/${encodeURIComponent(thing.id)}`;
+		const rtn = `../${encodeURIComponent(thing.type)}/${encodeURIComponent(thing.id)}`;
 		return rtn;
 	}
 </script>
 
-<main class="place-content-center drop-shadow-2xl w-2/3 mx-auto mt-10 rounded-xl p-4 bg-base-200">
-	<p>
-		{$_("route.things.type.index.discovered", {
+<main
+	class="place-content-center flex flex-wrap flex-col drop-shadow-2xl m-auto mt-10 rounded-xl p-4 bg-base-200"
+	style="max-width: 600px;"
+>
+	<p class="text-center">
+		{$_("route.things.type.[id].discovered", {
 			values: {
 				count: things.count,
 			},
@@ -43,20 +45,14 @@
 	<table class="mt-2">
 		<thead>
 			<tr>
-				<th id="type" colspan="2">{$_("type")}</th>
-			</tr>
-			<tr>
-				<th id="typeid">{$_("id")}</th>
-				<th id="typeversion">{$_("version")}</th>
 				<th>{$_("id")}</th>
-				<th>{$_("count.things")}</th>
+				<th>{$_("id")}</th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each things.values as thing, i}
 				<tr>
-					<td>{thing.type.id}</td>
-					<td>{thing.type.version}</td>
+					<td>{thing.type}</td>
 					<td><a class="link" href={getHref(thing)}>{thing.id}</a></td>
 				</tr>
 			{/each}
@@ -71,11 +67,5 @@
 	td,
 	th {
 		@apply m-2 p-2 border-2 border-primary;
-	}
-
-	#type,
-	#typeid,
-	#typeversion {
-		@apply bg-primary-focus;
 	}
 </style>

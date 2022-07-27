@@ -65,10 +65,10 @@
 </script>
 
 <main
-	class="place-content-center flex flex-wrap drop-shadow-2xl m-auto mt-10 rounded-xl p-4 bg-base-200"
+	class="place-content-center flex flex-wrap flex-col drop-shadow-2xl m-auto mt-10 rounded-xl p-4 bg-base-200"
 	style="max-width: 600px;"
 >
-	<p>
+	<p class="text-center">
 		{$_("route.things.type.index.discovered", {
 			values: {
 				count: things.count,
