@@ -1,4 +1,4 @@
-import { Either, isRelationship, isThing, Relationship, Thing } from "../models/core";
+import { Either, isRelationship, isThing, Relationship, Thing } from "../common/core";
 import type { DeepPartial } from "tsdef";
 import { KnownType } from "../models/known-types";
 

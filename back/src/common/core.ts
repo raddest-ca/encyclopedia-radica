@@ -1,4 +1,4 @@
-import { KnownType } from "./known-types";
+import { KnownType } from "../models/known-types";
 
 export interface Thing<T extends KnownType> {
 	type: T;

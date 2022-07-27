@@ -1,6 +1,6 @@
 import { App } from "../../app";
 import { ThingQuery } from "../../data/store";
-import { Thing } from "../../models/core";
+import { Thing } from "../../common/core";
 
 export default function(app: App) {
     app.express.post("/things/list", async (req, res) => {
