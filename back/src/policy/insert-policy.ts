@@ -39,8 +39,7 @@ function AllowDates(body: PolicyPayload): ApiResponse<PolicyPayload> {
 	const dates = body.queue.things.filter(t => t.type === "date");
 	const errors: ParameterizedMessage[] = [];
 	for (const date of dates) {
-		logger.debug(/\d\d\d\d\-\d\d\-\d\d/.test(date.id), "checking date")
-		if (!/\d\d\d\d\-\d\d\-\d\d/.test(date.id)) {
+		if (!/\-?\d\d\d\d\-\d\d\-\d\d/.test(date.id)) {
 			errors.push($_(keys.policy_bad_date))
 		}
 	}

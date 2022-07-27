@@ -67,7 +67,7 @@ export async function insert(fetch: FetchFunc, body: InsertPayload) {
 export async function getThings<T extends KnownType>(fetch: FetchFunc, body: ThingQuery<T>): Promise<CollectionResult<Thing<T>>> {
 	console.log("Requesting things with body", body);
 	try {
-		const req = await fetch(`${backend}/things/list`, {
+		const req = await fetch(`${backend}/things`, {
 			headers: {
 				"Content-Type": "application/json",
 			},

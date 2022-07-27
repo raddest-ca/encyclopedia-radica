@@ -69,10 +69,11 @@ export class App {
 			(await import("../routes/index")).default,
 			(await import("../routes/insert")).process,
 			(await import("../routes/beans")).default,
-			(await import("../routes/things/list")).default,
+			(await import("../routes/things")).default,
 			(await import("../routes/relationships")).default,
 			(await import("../routes/users/create")).default,
 			(await import("../routes/users/list")).default,
+			(await import("../routes/all")).default,
 		]);
 		for (const route of routes) {
 			route(this);

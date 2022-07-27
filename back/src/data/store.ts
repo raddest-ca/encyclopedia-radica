@@ -1,6 +1,8 @@
 import { Either, isRelationship, isThing, Relationship, Thing } from "../common/core";
 import type { DeepPartial } from "tsdef";
 import { KnownType } from "../models/known-types";
+import { createLogger } from "bunyan";
+import { config } from "../config";
 
 export interface ThingQuery<T extends KnownType> {
 	filter: {
@@ -35,16 +37,25 @@ export interface CollectionResult<T> {
 export class Store {
 	private things: Array<Thing<KnownType>> = [];
 	private relationships: Array<Relationship<KnownType, KnownType, KnownType>> = [];
+	private logger;
+
+	constructor() {
+		this.logger = createLogger({name: "store", level: config.log_level});
+	}
 
 	public async add(x: Either) {
 		// prevent adding duplicates
-		if (isThing(x) && (await this.getThings({ filter: x, countOnly: true })).count === 0)
+		if (isThing(x) && (await this.getThings({ filter: x, countOnly: true })).count === 0) {
+			this.logger.debug({thing: x}, "adding thing")
 			this.things.push(x);
+		}
 		if (
 			isRelationship(x) &&
 			(await this.getRelationships({ filter: x, countOnly: true })).count === 0
-		)
+			){
+			this.logger.debug({relationship: x}, "adding relationship")
 			this.relationships.push(x);
+		}
 		return x;
 	}
 
