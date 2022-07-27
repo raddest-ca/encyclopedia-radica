@@ -69,7 +69,7 @@ const policies = [
 ];
 
 export function process(body: InsertPayload): ApiResponse<Required<InsertPayload>> {
-	logger.debug({ body }, "process called");
+	logger.debug({ body }, "processing begin");
 	let iter = 0;
 
 	let processing: PolicyPayload = {
@@ -106,13 +106,13 @@ export function process(body: InsertPayload): ApiResponse<Required<InsertPayload
 			success: true,
 			relationship_count: processing.done.relationships.length,
 			thing_count: processing.done.things.length,
-		});
+		}, "processing end success");
 		return {
 			value: processing.done,
 			success: true,
 		};
 	} else {
-		logger.debug({ success: false, errors });
+		logger.debug({ success: false, errors }, "processing end failure");
 		return {
 			success: false,
 			errors,

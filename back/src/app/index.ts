@@ -1,12 +1,11 @@
 import express from "express";
 import morgan from "morgan";
-import { Store, ThingQuery } from "../data/store";
+import { Store } from "../data/store";
 import fs from "fs";
 import https from "https";
 import http from "http";
 import session from "express-session";
 import { config } from "../config";
-import passport from "passport";
 import helmet from "helmet";
 import { Auth } from "../auth";
 import cors from "cors";
@@ -19,16 +18,17 @@ declare module 'express-session' {
     }
 }
 
-const logger = createLogger({ name: "app", level: config.log_level });
-
 export class App {
 	public express: express.Express;
 	public store: Store;
 	public auth: Auth;
 	private httpsServer: https.Server;
 	private httpServer: http.Server;
+	private logger;
+
 
 	constructor(store: Store, auth: Auth) {
+		this.logger = createLogger({ name: "app", level: config.log_level });;
 		this.store = store;
 		this.auth = auth;
 		this.auth.setApp(this);
@@ -48,7 +48,7 @@ export class App {
 	}
 
 	async setup() {
-		logger.info("setup begin");
+		this.logger.debug("setup begin");
 		this.express.use(express.json());
 		this.express.use(express.urlencoded({ extended: true }));
 		this.express.use(cors());
@@ -77,16 +77,16 @@ export class App {
 		for (const route of routes) {
 			route(this);
 		}
-		logger.info("setup end");
+		this.logger.debug("setup end");
 	}
 
 	async run(httpPort: number, httpsPort: number) {
-		logger.info("starting servers");
+		this.logger.debug("starting servers");
 		this.httpsServer.listen(httpsPort, () => {
-			logger.info(`Listening on https://localhost:${httpPort}`);
+			this.logger.info(`Listening on https://localhost:${httpPort}`);
 		});
 		this.httpServer.listen(httpPort, () => {
-			logger.info(`Listening on http://localhost:${httpsPort}`);
+			this.logger.info(`Listening on http://localhost:${httpsPort}`);
 		})
 	}
 }
