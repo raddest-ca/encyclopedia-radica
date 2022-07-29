@@ -22,7 +22,7 @@ export function process(app: App) {
 	app.express.post("/insert", async (req, res) => {
 		const payload = req.body as InsertPayload;
 		try {
-			const policyResult = processPolicy(payload);
+			const policyResult = await processPolicy(app, payload);
 			if (policyResult.success) {
 				app.store.addAll(...policyResult.value.things);
 				app.store.addAll(...policyResult.value.relationships);

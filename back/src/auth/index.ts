@@ -24,18 +24,17 @@ export class Auth {
 	}
 
 	public async userExists(id: string) {
-		const rtn = await this.app.store.getThings({
+		const rtn = await this.app.store.countThings({
 			filter: {
 				id,
 				type: "user",
 			},
-			countOnly: true,
 		});
-		return rtn.count > 0;
+		return rtn > 0;
 	}
 
 	public async createUser(slug: string, password: string) {
-        const existing = await this.app.store.getRelationships({
+        const existingCount = await this.app.store.countRelationships({
             filter: {
                 left: {
                     type: "user",
@@ -45,12 +44,11 @@ export class Auth {
                     type: "string",
                     id: slug
                 }
-            },
-            countOnly: true
+            }
         });
         // todo: create user-facing error type, check w/ instanceof
         // todo: add localization for server errors :P
-        if (existing.count > 0) throw new Error("slug taken");
+        if (existingCount > 0) throw new Error("slug taken");
 
 
 		const salt = await bcrypt.genSalt();

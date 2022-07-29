@@ -27,7 +27,7 @@
 				id="slug"
 				type="text"
 				placeholder={$_("route.things.users.create.slug.placeholder")}
-				class="input input-bordered w-full max-w-xs"
+				class="input input-bordered w-full max-w-xs placeholder-gray-600"
 			/>
 		</div>
 		<div class="form-control w-full max-w-xs">
@@ -39,7 +39,7 @@
 				id="password"
 				type="text"
 				placeholder={$_("route.things.users.create.password.placeholder")}
-				class="input input-bordered w-full max-w-xs"
+				class="input input-bordered w-full max-w-xs placeholder-gray-600"
 			/>
 		</div>
 

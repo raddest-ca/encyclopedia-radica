@@ -9,3 +9,17 @@ Content-Type: application/json
         }
     ]
 }
+
+###
+
+POST https://localhost/insert
+Content-Type: application/json
+
+{
+    "things": [
+        {
+            "type": "date",
+            "id": "1984-01-50"
+        }
+    ]
+}

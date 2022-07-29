@@ -1,0 +1,20 @@
+POST https://localhost/countThings
+Content-Type: application/json
+
+{
+    "filter": {
+        "type": "date"
+    }
+}
+
+
+### 
+
+POST https://localhost/countRelationships
+Content-Type: application/json
+
+{
+    "filter": {
+        "type": "name"
+    }
+}
