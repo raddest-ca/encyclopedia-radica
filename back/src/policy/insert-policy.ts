@@ -3,11 +3,11 @@ import { ApiResponse } from "../common/api-response";
 import { $_, keys, ParameterizedMessage } from "../common/server-i18n";
 import { config } from "../config";
 import { Relationship, Thing } from "../common/core";
-import { KnownType } from "../models/known-types";
-import { InsertableThing, InsertPayload } from "../routes/insert";
+import { KnownType } from "../common/known-types";
 import { dereference } from "./util";
 import { ServerResponse } from "http";
 import { App } from "../app";
+import { InsertPayload } from "../common/inserting";
 
 type PolicyResult = ({ result: "APPROVE" } | { result: "DENY"; errors: ParameterizedMessage[] }) &
 	({ thing: Thing<KnownType> } | { relationship: Relationship<KnownType, KnownType, KnownType> });

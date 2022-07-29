@@ -1,6 +1,6 @@
 import { Either, isRelationship, isThing, Relationship, Thing } from "../common/core";
 import type { DeepPartial } from "tsdef";
-import { KnownType } from "../models/known-types";
+import { KnownType } from "../common/known-types";
 import { createLogger } from "bunyan";
 import { config } from "../config";
 import { getRelationships, getThings, RelationshipQuery, ThingQuery } from "../common/querying";

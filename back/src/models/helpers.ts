@@ -1,5 +1,5 @@
 import { Either, Relationship, Thing } from "../common/core";
-import { KnownType } from "./known-types";
+import { KnownType } from "../common/known-types";
 import { v4 as uuid } from "uuid";
 import { toIsoString } from "../jshelpers";
 

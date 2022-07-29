@@ -2,6 +2,7 @@ import type { Relationship, Thing } from "./core";
 import type { LoadEvent } from "@sveltejs/kit";
 import type { KnownType } from "./known-types";
 import type { RelationshipQuery, ThingQuery } from "./common/querying";
+import type { InsertPayload } from "./common/inserting";
 
 // export const backend = "https://localhost";
 export const backend = "http://localhost";
@@ -9,11 +10,6 @@ export const backend = "http://localhost";
 export type FetchFunc = typeof fetch | LoadEvent["fetch"];
 
 export type ThingResults = Awaited<ReturnType<typeof getThings>>;
-
-export interface InsertPayload {
-	things: Thing<KnownType>[];
-	relationships: Relationship<KnownType, KnownType, KnownType>[];
-}
 
 export async function insert(fetch: FetchFunc, body: InsertPayload) {
 	console.log("Inserting with payload", body);

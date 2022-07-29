@@ -1,4 +1,4 @@
-import { KnownType, knownTypes } from "../models/known-types";
+import { KnownType, knownTypes } from "../common/known-types";
 import type { Either, Thing } from "../common/core";
 import type { Store } from "./store";
 import { thing, rel, meta, name, transcribe, link } from "../models/helpers";

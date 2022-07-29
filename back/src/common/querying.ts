@@ -1,4 +1,4 @@
-import { KnownType } from "../models/known-types";
+import { KnownType } from "./known-types";
 import { Relationship, Thing } from "./core";
 
 export interface ThingQuery<T extends KnownType> {

@@ -1,9 +1,9 @@
 import { v4 } from "uuid";
 import { ApiResponse } from "../common/api-response";
 import { $_, keys, ParameterizedMessage } from "../common/server-i18n";
-import { Either, Relationship, Thing } from "../common/core";
-import { InsertableRelationship, InsertPayload } from "../routes/insert";
-import { KnownType } from "../models/known-types";
+import { Relationship, Thing } from "../common/core";
+import { KnownType } from "../common/known-types";
+import { InsertableRelationship, InsertPayload } from "../common/inserting";
 
 export function dereference(body: InsertPayload): ApiResponse<{
 	things: Thing<KnownType>[],

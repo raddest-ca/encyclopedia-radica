@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { InsertPayload } from "$lib/common/inserting";
+
 	import Spinner from "$lib/components/Spinner.svelte";
 	import { insert } from "$lib/requesting";
 	import { _ } from "svelte-i18n";
@@ -7,10 +9,30 @@
 	function submit() {
 		submitEnabled = false;
 		insert(fetch, {
-			things: [{}],
-			relationships: [],
-		});
+			things: [
+				{
+					type: "user",
+					idRef: "myUser",
+				},
+				// {
+				// 	type: "slug",
+				// 	id: slug,
+				// },
+				// {
+				// 	type: "password",
+				// 	idRef: "pw",
+				// },
+			],
+			// relationships: [
+			// 	{
+
+			// 	}
+			// ]
+		} as InsertPayload);
 	}
+
+	let slug: string;
+	let password: string;
 
 	let error = "";
 </script>
@@ -26,6 +48,7 @@
 			<input
 				id="slug"
 				type="text"
+				bind:value={slug}
 				placeholder={$_("route.things.users.create.slug.placeholder")}
 				class="input input-bordered w-full max-w-xs placeholder-gray-600"
 			/>
@@ -38,6 +61,7 @@
 			<input
 				id="password"
 				type="text"
+				bind:value={password}
 				placeholder={$_("route.things.users.create.password.placeholder")}
 				class="input input-bordered w-full max-w-xs placeholder-gray-600"
 			/>

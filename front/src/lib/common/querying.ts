@@ -1,4 +1,4 @@
-import { KnownType } from "../models/known-types";
+import { KnownType } from "./known-types";
 import { Relationship, Thing } from "./core";
 
 export interface ThingQuery<T extends KnownType> {
@@ -21,6 +21,7 @@ export interface RelationshipQuery<L extends KnownType, T extends KnownType, R e
 		};
 	};
 }
+
 
 export function getThings<T extends KnownType>(
 	things: Thing<any>[],
