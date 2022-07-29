@@ -1,10 +1,30 @@
-POST https://localhost/users/create
+POST https://localhost/insert
 Content-Type: application/json
 
 {
-    "slug": "beans",
-    "password": "howdy"
+	"things": [
+		{
+			"type": "user",
+			"idRef": "asd"
+		}
+	],
+	"relationships": [
+		{
+			"type": "slug",
+			"left": {
+				"type": "user",
+				"idRef": "asd"
+			},
+			"right": {
+				"type": "string",
+				"id": "benis"
+			}
+		}
+	]
 }
+
+# "slug": "beans",
+# "password": "howdy"
 
 ###
 
@@ -13,7 +33,7 @@ Content-Type: application/json
 
 ###
 
-POST https://localhost/rels
+POST https://localhost/relationships
 Content-Type: application/json
 
 {
@@ -27,7 +47,7 @@ Content-Type: application/json
 
 ###
 
-POST https://localhost/rels
+POST https://localhost/relationships
 Content-Type: application/json
 
 {

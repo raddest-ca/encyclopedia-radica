@@ -73,8 +73,6 @@ export class App {
 			(await import("../routes/countThings")).default,
 			(await import("../routes/relationships")).default,
 			(await import("../routes/countRelationships")).default,
-			(await import("../routes/users/create")).default,
-			(await import("../routes/users/list")).default,
 			(await import("../routes/all")).default,
 		]);
 		for (const route of routes) {

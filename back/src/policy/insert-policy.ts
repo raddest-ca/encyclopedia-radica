@@ -8,6 +8,7 @@ import { dereference } from "./util";
 import { ServerResponse } from "http";
 import { App } from "../app";
 import { InsertPayload } from "../common/inserting";
+import { getRelationships } from "../common/querying";
 
 type PolicyResult = ({ result: "APPROVE" } | { result: "DENY"; errors: ParameterizedMessage[] }) &
 	({ thing: Thing<KnownType> } | { relationship: Relationship<KnownType, KnownType, KnownType> });
@@ -157,6 +158,50 @@ export async function process(
 	}
 	logger.debug("policy iteration end");
 
+	for (const thing of deref.value.things) {
+		if (
+			!results.some(
+				r =>
+					r.result === "APPROVE" &&
+					"thing" in r &&
+					r.thing.id === thing.id &&
+					r.thing.type === thing.type,
+			)
+		) {
+			results.push({
+				result: "DENY",
+				thing,
+				errors: [$_(keys.policy_unallowed_thing, thing.type, thing.id)],
+			});
+		}
+	}
+
+	for (const relationship of deref.value.relationships) {
+		if (
+			getRelationships(
+				results
+					.filter(r => r.result === "APPROVE" && "relationship" in r)
+					.map(r => (r as any).relationship),
+				{ filter: relationship },
+			).length === 0
+		) {
+			results.push({
+				result: "DENY",
+				relationship,
+				errors: [
+					$_(
+						keys.policy_unallowed_relationship,
+						relationship.left.type,
+						relationship.left.id,
+						relationship.type,
+						relationship.right.type,
+						relationship.right.id,
+					),
+				],
+			});
+		}
+	}
+
 	if (results.filter(x => x.result === "DENY").length === 0) {
 		logger.debug(
 			{
@@ -169,10 +214,13 @@ export async function process(
 			success: true,
 		};
 	} else {
-		logger.debug({ success: false, results: results.filter(x => x.result === "DENY") }, "processing end failure");
+		logger.debug(
+			{ success: false, results: results.filter(x => x.result === "DENY") },
+			"processing end failure",
+		);
 		return {
 			success: false,
-			errors: results.flatMap(x => "errors" in x ? x.errors : []),
+			errors: results.flatMap(x => ("errors" in x ? x.errors : [])),
 		};
 	}
 }
