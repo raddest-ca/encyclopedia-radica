@@ -1,48 +1,18 @@
 import type { Relationship, Thing } from "./core";
 import type { LoadEvent } from "@sveltejs/kit";
 import type { KnownType } from "./known-types";
-
+import type { RelationshipQuery, ThingQuery } from "./common/querying";
 
 // export const backend = "https://localhost";
 export const backend = "http://localhost";
-
-export interface ThingQuery<T extends KnownType> {
-	filter: {
-		id?: string;
-		type?: T;
-	};
-	countOnly?: boolean;
-}
-
-export interface RelationshipQuery<L extends KnownType, T extends KnownType, R extends KnownType> {
-	filter: {
-		type?: T;
-		left?: {
-			id?: string;
-			type?: L;
-		};
-		right?: {
-			id?: string;
-			type?: R;
-		};
-	};
-	countOnly?: boolean;
-}
-
-export interface CollectionResult<T> {
-	values: T[];
-	count: number;
-	countOnly: boolean;
-	success: boolean;
-}
 
 export type FetchFunc = typeof fetch | LoadEvent["fetch"];
 
 export type ThingResults = Awaited<ReturnType<typeof getThings>>;
 
 export interface InsertPayload {
-	things: Thing<any>[];
-	relationships: Relationship<any, any, any>[];
+	things: Thing<KnownType>[];
+	relationships: Relationship<KnownType, KnownType, KnownType>[];
 }
 
 export async function insert(fetch: FetchFunc, body: InsertPayload) {
@@ -64,46 +34,49 @@ export async function insert(fetch: FetchFunc, body: InsertPayload) {
 	}
 }
 
-export async function getThings<T extends KnownType>(fetch: FetchFunc, body: ThingQuery<T>): Promise<CollectionResult<Thing<T>>> {
+export async function getThings<T extends KnownType>(
+	fetch: FetchFunc,
+	body: ThingQuery<T>,
+) {
 	console.log("Requesting things with body", body);
-	try {
-		const req = await fetch(`${backend}/things`, {
-			headers: {
-				"Content-Type": "application/json",
-			},
-			method: "POST",
-			body: JSON.stringify(body),
-		});
-		return await req.json();
-	} catch (e) {
-		console.error("Fetching things failed", e);
-		return {
-			values: [],
-			count: 0,
-			countOnly: true,
-			success: false
-		}
-	}
+	const req = await fetch(`${backend}/things`, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+		method: "POST",
+		body: JSON.stringify(body),
+	});
+	return (await req.json()) as Thing<T>[];
 }
 
-export async function getCollatedThings<T extends KnownType>(fetch: FetchFunc, bodies: ThingQuery<T>[]): Promise<CollectionResult<Thing<T>>> {
+export async function countThings<T extends KnownType>(
+	fetch: FetchFunc,
+	body: ThingQuery<T>,
+) {
+	console.log("Requesting things with body", body);
+	const req = await fetch(`${backend}/countThings`, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+		method: "POST",
+		body: JSON.stringify(body),
+	});
+	return (await req.json()) as number;
+}
+
+export async function getCollatedThings<T extends KnownType>(
+	fetch: FetchFunc,
+	bodies: ThingQuery<T>[],
+): Promise<Thing<T>[]> {
 	const res = await Promise.all(bodies.map((b) => getThings(fetch, b)));
-	return res.reduce(
-		(acc, v) => {
-			acc.values?.push(...(v.values ?? []));
-			acc.count += v.values?.length ?? 0;
-			return acc;
-		},
-		{
-			values: [],
-			count: 0,
-			countOnly: false,
-			success: true,
-		},
-	);
+	return res.flatMap(x => x);
 }
 
-export async function getRelationships<L extends KnownType, T extends KnownType, R extends KnownType>(fetch: FetchFunc, body: RelationshipQuery<L,T,R>) {
+export async function getRelationships<
+	L extends KnownType,
+	T extends KnownType,
+	R extends KnownType,
+>(fetch: FetchFunc, body: RelationshipQuery<L, T, R>) {
 	console.log("Requesting relationships with query", body);
 	const req = await fetch(`${backend}/relationships`, {
 		headers: {
@@ -112,25 +85,35 @@ export async function getRelationships<L extends KnownType, T extends KnownType,
 		method: "POST",
 		body: JSON.stringify(body),
 	});
-	return (await req.json()) as {
-		values: Relationship<L,T,R>[];
-		count: number;
-	};
+	return (await req.json()) as Relationship<L, T, R>[];
 }
 
-export async function getCollatedRelationships<L extends KnownType, T extends KnownType, R extends KnownType>(fetch: FetchFunc, bodies: RelationshipQuery<L,T,R>[]) {
+export async function countRelationships<
+	L extends KnownType,
+	T extends KnownType,
+	R extends KnownType,
+>(fetch: FetchFunc, body: RelationshipQuery<L, T, R>) {
+	console.log("Requesting relationships with query", body);
+	const req = await fetch(`${backend}/countRelationships`, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+		method: "POST",
+		body: JSON.stringify(body),
+	});
+	return (await req.json()) as number;
+}
+
+export async function getCollatedRelationships<
+	L extends KnownType,
+	T extends KnownType,
+	R extends KnownType,
+>(
+	fetch: FetchFunc,
+	bodies: RelationshipQuery<L, T, R>[],
+): Promise<Relationship<L, T, R>[]> {
 	const res = await Promise.all(bodies.map((b) => getRelationships(fetch, b)));
-	return res.reduce(
-		(acc, v) => {
-			acc.values?.push(...(v.values ?? []));
-			acc.count += v.values?.length ?? 0;
-			return acc;
-		},
-		{
-			values: [],
-			count: 0,
-		},
-	);
+	return res.flatMap(x => x);
 }
 
 export type RelationshipResults = Awaited<ReturnType<typeof getRelationships>>;

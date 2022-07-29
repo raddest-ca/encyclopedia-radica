@@ -1,6 +1,8 @@
 <script lang="ts" context="module">
 	import type { LoadEvent, LoadOutput } from "@sveltejs/kit";
 
+	import { getCollatedRelationships, getThings } from "$lib/requesting";
+
 	export async function load({ fetch, params }: LoadEvent): Promise<LoadOutput> {
 		const things = await getThings(fetch, {
 			filter: {
@@ -10,7 +12,7 @@
 		console.log(things);
 		const uris = await getCollatedRelationships(
 			fetch,
-			things.values!.map((thing) => ({
+			things.map((thing) => ({
 				filter: {
 					left: {
 						id: thing.id,
@@ -34,22 +36,15 @@
 </script>
 
 <script lang="ts">
-	import {
-		getCollatedRelationships,
-		getRelationships,
-		getThings,
-		type RelationshipResults,
-		type ThingResults,
-	} from "$lib/requesting";
 	import { _ } from "svelte-i18n";
 	import { knownTypes, type KnownType } from "$lib/known-types";
-	import type { Thing } from "$lib/core";
+	import type { Relationship, Thing } from "$lib/core";
 	import { mapRelationship } from "$lib/data-helper";
 
-	export let things: ThingResults;
-	export let uris: RelationshipResults;
+	export let things: Thing<"video">[];
+	export let uris: Relationship<"video", "uri", "string">[];
 
-	$: uriLookup = mapRelationship(uris.values ?? []);
+	$: uriLookup = mapRelationship(uris);
 
 	function getFileType(uri: string) {
 		return uri.substr(uri.lastIndexOf(".") + 1);
@@ -66,13 +61,13 @@
 	<p>
 		{$_("route.things.video.index.discovered", {
 			values: {
-				count: things.count,
+				count: things.length,
 			},
 		})}
 	</p>
 
 	<div class="flex flex-wrap">
-		{#each things.values as thing, i}
+		{#each things as thing, i}
 			{@const uri = uriLookup.get(thing.id)}
 
 			<div class="bg-base-300 border-primary border-2 p-2 rounded-xl">
@@ -80,7 +75,7 @@
 				<!-- TODO: find good example videos for adding caption support -->
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<video controls>
-					{#each uriLookup.get(thing.id) as uri}
+					{#each uriLookup.get(thing.id) ?? [] as uri}
 						<source src={uri} type="video/{getFileType(uri)}" />
 					{/each}
 				</video>

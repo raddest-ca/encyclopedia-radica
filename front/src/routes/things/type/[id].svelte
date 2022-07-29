@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
 	import type { LoadEvent, LoadOutput } from "@sveltejs/kit";
+	import { getThings } from "$lib/requesting";
 
 	export async function load({ fetch, params }: LoadEvent): Promise<LoadOutput> {
 		const things = await getThings(fetch, {
@@ -16,12 +17,11 @@
 </script>
 
 <script lang="ts">
-	import { getThings, type CollectionResult, type ThingResults } from "$lib/requesting";
 	import { _ } from "svelte-i18n";
 	import type { Thing } from "$lib/core";
 	import type { KnownType } from "$lib/known-types";
 
-	export let things: CollectionResult<Thing<"date">>;
+	export let things: Thing<"date">[];
 
 	function getHref(thing: Thing<"date">) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
@@ -37,7 +37,7 @@
 	<p class="text-center">
 		{$_("route.things.type.[id].discovered", {
 			values: {
-				count: things.count,
+				count: things.length,
 			},
 		})}
 	</p>
@@ -50,7 +50,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each things.values as thing, i}
+			{#each things as thing, i}
 				<tr>
 					<td>{thing.type}</td>
 					<td><a class="link" href={getHref(thing)}>{thing.id}</a></td>

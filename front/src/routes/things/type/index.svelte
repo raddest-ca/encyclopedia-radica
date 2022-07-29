@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
 	import type { LoadEvent, LoadOutput } from "@sveltejs/kit";
+	import { countRelationships, countThings, getThings } from "$lib/requesting";
 
 	export async function load({ fetch, params }: LoadEvent): Promise<LoadOutput> {
 		const things = await getThings(fetch, {
@@ -9,23 +10,21 @@
 		});
 
 		const thingCounts = await Promise.all(
-			things.values!.map((x) =>
-				getThings(fetch, {
+			things.map((x) =>
+				countThings(fetch, {
 					filter: {
 						type: x.id as KnownType,
 					},
-					countOnly: true,
 				}),
 			),
 		);
 
 		const relCounts = await Promise.all(
-			things.values!.map((x) =>
-				getRelationships(fetch, {
+			things.map((x) =>
+				countRelationships(fetch, {
 					filter: {
 						type: x.id as KnownType,
 					},
-					countOnly: true,
 				}),
 			),
 		);
@@ -41,21 +40,13 @@
 </script>
 
 <script lang="ts">
-	import {
-		getCollatedRelationships,
-		getCollatedThings,
-		getRelationships,
-		getThings,
-		type RelationshipResults,
-		type ThingResults,
-	} from "$lib/requesting";
 	import { _ } from "svelte-i18n";
 	import { knownTypes, type KnownType } from "$lib/known-types";
 	import type { Thing } from "$lib/core";
 
-	export let things: ThingResults;
-	export let thingCounts: ThingResults[];
-	export let relCounts: RelationshipResults[];
+	export let things: Thing<"type">[];
+	export let thingCounts: number[];
+	export let relCounts: number[];
 
 	function getHref(thing: Thing<KnownType>) {
 		// since going in an href attrib as-is, needs to be sanitized twice.
@@ -71,7 +62,7 @@
 	<p class="text-center">
 		{$_("route.things.type.index.discovered", {
 			values: {
-				count: things.count,
+				count: things.length,
 			},
 		})}
 	</p>
@@ -85,12 +76,12 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each things.values as thing, i}
+			{#each things as thing, i}
 				<tr>
 					<td>{thing.type}</td>
 					<td><a class="link" href={getHref(thing)}>{thing.id}</a></td>
-					<td>{thingCounts[i].count}</td>
-					<td>{relCounts[i].count}</td>
+					<td>{thingCounts[i]}</td>
+					<td>{relCounts[i]}</td>
 				</tr>
 			{/each}
 		</tbody>

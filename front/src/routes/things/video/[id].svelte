@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
 	import type { LoadEvent, LoadOutput } from "@sveltejs/kit";
+	import { getRelationships } from "$lib/requesting";
 
 	export async function load({ fetch, params }: LoadEvent): Promise<LoadOutput> {
 		const uris = await getRelationships(fetch, {
@@ -17,7 +18,7 @@
 		return {
 			props: {
 				id: decodeURIComponent(params.id),
-				uris: uris.values.map((x) => x.right.id),
+				uris: uris.map((x) => x.right.id),
 			},
 		};
 	}
@@ -26,7 +27,6 @@
 <script lang="ts">
 	import CopyButton from "../../../lib/components/CopyButton.svelte";
 	import { _ } from "svelte-i18n";
-	import { getRelationships, type RelationshipResults } from "$lib/requesting";
 	import { knownTypes } from "$lib/known-types";
 
 	export let id: string;

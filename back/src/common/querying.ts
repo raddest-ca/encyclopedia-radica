@@ -22,10 +22,6 @@ export interface RelationshipQuery<L extends KnownType, T extends KnownType, R e
 	};
 }
 
-export interface CollectionResult<T> {
-	values: T[];
-	success: boolean;
-}
 
 export function getThings<T extends KnownType>(
 	things: Thing<any>[],
