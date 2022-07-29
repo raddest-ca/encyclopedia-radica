@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 import { ApiResponse } from "../common/api-response";
-import { $_, keys, ParameterizedMessage } from "../common/i18n";
+import { $_, keys, ParameterizedMessage } from "../common/server-i18n";
 import { Either, Relationship, Thing } from "../common/core";
 import { InsertableRelationship, InsertPayload } from "../routes/insert";
 import { KnownType } from "../models/known-types";
