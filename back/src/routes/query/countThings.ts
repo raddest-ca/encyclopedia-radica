@@ -1,5 +1,5 @@
-import { App } from "../app";
-import { ThingQuery } from "../common/querying";
+import { App } from "../../app";
+import { ThingQuery } from "../../common/querying";
 
 export default function (app: App) {
 	app.express.post("/countThings", async (req, res) => {

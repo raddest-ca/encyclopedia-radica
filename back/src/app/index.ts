@@ -10,6 +10,7 @@ import helmet from "helmet";
 import { Auth } from "../auth";
 import cors from "cors";
 import { createLogger } from "bunyan";
+import { setup as setupRouter } from "../router";
 
 declare module 'express-session' {
     interface SessionData {
@@ -28,7 +29,7 @@ export class App {
 
 
 	constructor(store: Store, auth: Auth) {
-		this.logger = createLogger({ name: "app", level: config.log_level });;
+		this.logger = createLogger({ name: "app", level: config.log_level_app });;
 		this.store = store;
 		this.auth = auth;
 		this.auth.setApp(this);
@@ -64,20 +65,8 @@ export class App {
 			saveUninitialized: true,
 		}))
 		
-		const routes = await Promise.all([
-			//todo: auto-discover or warnings
-			(await import("../routes/index")).default,
-			(await import("../routes/insert")).process,
-			(await import("../routes/beans")).default,
-			(await import("../routes/things")).default,
-			(await import("../routes/countThings")).default,
-			(await import("../routes/relationships")).default,
-			(await import("../routes/countRelationships")).default,
-			(await import("../routes/all")).default,
-		]);
-		for (const route of routes) {
-			route(this);
-		}
+		await setupRouter(this);
+		
 		this.logger.debug("setup end");
 	}
 

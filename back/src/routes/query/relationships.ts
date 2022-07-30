@@ -1,5 +1,5 @@
-import { App } from "../app";
-import { RelationshipQuery } from "../common/querying";
+import { App } from "../../app";
+import { RelationshipQuery } from "../../common/querying";
 
 export default function (app: App) {
 	app.express.post("/relationships", async (req, res) => {

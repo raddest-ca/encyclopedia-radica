@@ -1,4 +1,4 @@
-import { Either, isRelationship, isThing, Relationship, Thing } from "../common/core";
+import { Either, eq, isRelationship, isThing, Relationship, Thing } from "../common/core";
 import type { DeepPartial } from "tsdef";
 import { KnownType } from "../common/known-types";
 import { createLogger } from "bunyan";
@@ -11,7 +11,7 @@ export class Store {
 	private logger;
 
 	constructor() {
-		this.logger = createLogger({ name: "store", level: config.log_level });
+		this.logger = createLogger({ name: "store", level: config.log_level_store });
 	}
 
 	public async add(x: Either) {
@@ -25,6 +25,19 @@ export class Store {
 			this.relationships.push(x);
 		}
 		return x;
+	}
+
+	public async remove(x: Either) {
+		if (isThing(x)) {
+			this.things = this.things.filter(y => !eq(x,y));
+		}
+		if (isRelationship(x)) {
+			this.relationships = this.relationships.filter(y => !eq(x,y));
+		}
+	}
+
+	public async removeAll(...items: Either[]) {
+		return await Promise.all(items.map(x => this.remove(x)));
 	}
 
 	public async addAll(...items: Either[]) {

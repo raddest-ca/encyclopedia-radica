@@ -1,5 +1,5 @@
-import { App } from "../app";
-import { getLoginUrl } from "../auth/oidc";
+import { App } from "../../app";
+import { getLoginUrl } from "../../auth/oidc";
 
 export default function(app: App) {
     app.express.get("/beans", (req, res) => {
