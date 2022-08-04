@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { _ } from "svelte-i18n";
-	import { backends, type Backend } from "$lib/backends";
+	import { backends, defaultBackend, type Backend } from "$lib/backends";
 	import { fly } from "svelte/transition";
 	import { backend } from "$lib/requesting";
 
@@ -43,6 +43,12 @@
 		success = true;
 		clearTimeout(successHandle);
 		successHandle = setTimeout(() => (success = false), 2000);
+	}
+	function addDefault() {
+		backends.update((x) => {
+			x.push({ ...defaultBackend });
+			return x;
+		});
 	}
 
 	function deleteBackend(backend: Backend) {
@@ -255,7 +261,7 @@
 									>{$_("route.backends.index.edit-form.new_account")}</a
 								>
 							{/if}
-						{:else}
+						{:else if backend.useAuth}
 							<div class="text-neutral-content">
 								<p>
 									{$_("route.backends.index.auth.user_id", {
@@ -308,9 +314,12 @@
 				required
 			/>
 		</div>
-		<div class="form-control max-w-fit mt-2">
+		<div class="form-control flex flex-row gap-2 mt-2">
 			<button on:click|preventDefault={addBlank} type="submit" class="btn btn-primary"
 				>{$_("route.backends.index.addButton")}</button
+			>
+			<button on:click|preventDefault={addDefault} type="submit" class="btn btn-primary"
+				>{$_("route.backends.index.addDefaultButton")}</button
 			>
 		</div>
 	</form>

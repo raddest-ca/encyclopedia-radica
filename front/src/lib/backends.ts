@@ -6,12 +6,20 @@ export interface Backend {
 	uri: string;
 	comment: string;
 	active: boolean;
-    useAuth: boolean;
-    auth?: {
-        userId: string;
-        token: string;
-    }
+	useAuth: boolean;
+	auth?: {
+		userId: string;
+		token: string;
+	};
 }
 
-export const backends = writableStorage("backend_contexts", [] as Backend[]);
+export const defaultBackend: Backend = {
+	name: "radica",
+	active: true,
+	uri: "http://localhost/",
+	comment: "default backend",
+	useAuth: false,
+};
+
+export const backends = writableStorage("backend_contexts", [{ ...defaultBackend }] as Backend[]);
 export const activeBackends = derived(backends, ($backends) => $backends.filter((x) => x.active));

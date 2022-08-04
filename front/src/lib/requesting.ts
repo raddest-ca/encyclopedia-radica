@@ -3,39 +3,43 @@ import type { LoadEvent } from "@sveltejs/kit";
 import type { KnownType } from "./known-types";
 import type { RelationshipQuery, ThingQuery } from "./common/querying";
 import type { InsertPayload } from "./common/inserting";
-
-// export const backend = "https://localhost";
-export const backend = "http://localhost";
+import { backends } from "./backends";
 
 export type FetchFunc = typeof fetch | LoadEvent["fetch"];
 
 export type ThingResults = Awaited<ReturnType<typeof getThings>>;
 
-export async function insert(fetch: FetchFunc, body: InsertPayload) {
-	console.log("Inserting with payload", body);
-	try {
-		const req = await fetch(`${backend}/insert`, {
-			headers: {
-				"Content-Type": "application/json",
-			},
-			method: "POST",
-			body: JSON.stringify(body),
-		});
-		return await req.json();
-	} catch (e) {
-		console.error("Inserting failed", e);
-		// todo: toast with error
-		// todo: standardize error responses from server
-		return null;
+export async function invoke(fetch: FetchFunc, route: string, body: any) {
+	for (const backend of backends) {
+		
 	}
 }
+
+// export async function insert(fetch: FetchFunc, body: InsertPayload) {
+// 	console.log("Inserting with payload", body);
+// 	try {
+// 		const req = await fetch(`${backend}/insert`, {
+// 			headers: {
+// 				"Content-Type": "application/json",
+// 			},
+// 			method: "POST",
+// 			body: JSON.stringify(body),
+// 		});
+// 		return await req.json();
+// 	} catch (e) {
+// 		console.error("Inserting failed", e);
+// 		// todo: toast with error
+// 		// todo: standardize error responses from server
+// 		return null;
+// 	}
+// }
 
 export async function getThings<T extends KnownType>(
 	fetch: FetchFunc,
 	body: ThingQuery<T>,
 ) {
 	console.log("Requesting things with body", body);
-	const req = await fetch(`${backend}/things`, {
+	const req = await fetch(`${backend}/query/things`, {
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -50,7 +54,7 @@ export async function countThings<T extends KnownType>(
 	body: ThingQuery<T>,
 ) {
 	console.log("Requesting things with body", body);
-	const req = await fetch(`${backend}/countThings`, {
+	const req = await fetch(`${backend}/query/countThings`, {
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -74,7 +78,7 @@ export async function getRelationships<
 	R extends KnownType,
 >(fetch: FetchFunc, body: RelationshipQuery<L, T, R>) {
 	console.log("Requesting relationships with query", body);
-	const req = await fetch(`${backend}/relationships`, {
+	const req = await fetch(`${backend}/query/relationships`, {
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -90,7 +94,7 @@ export async function countRelationships<
 	R extends KnownType,
 >(fetch: FetchFunc, body: RelationshipQuery<L, T, R>) {
 	console.log("Requesting relationships with query", body);
-	const req = await fetch(`${backend}/countRelationships`, {
+	const req = await fetch(`${backend}/query/countRelationships`, {
 		headers: {
 			"Content-Type": "application/json",
 		},

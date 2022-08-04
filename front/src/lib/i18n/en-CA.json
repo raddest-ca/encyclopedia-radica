@@ -20,6 +20,7 @@
     "route.backends.index.header": "Backends",
     "route.backends.index.none": "No backends found.",
     "route.backends.index.addButton": "Add",
+    "route.backends.index.addDefaultButton": "Add Default",
     "route.backends.index.active": "Active",
     "route.backends.index.use_auth": "Use Auth",
     "route.backends.index.auth.user_id": "User ID: {value}",
